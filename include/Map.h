@@ -6,7 +6,7 @@
 #include "Room.h"
 #include "Stack.h"
 
-const string direction_ctos(const char d)
+const std::string direction_ctos(const char d)
 {
   switch (d)
   {

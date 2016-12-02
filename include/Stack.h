@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iterator>
 #include <vector>
 
 template <class T>
@@ -55,7 +56,7 @@ void Stack<T>::pop()
 template <class T>
 void Stack<T>::print()
 {
-  ostream_iterator<T> out(cout, "\n");
+  std::ostream_iterator<T> out(std::cout, "\n");
   copy(elems.begin(), elems.end(), out);
 }
 
