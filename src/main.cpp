@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 
-#include "Map.h"
+#include "../include/Map.h"
 
 int main()
 {
