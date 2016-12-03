@@ -95,7 +95,7 @@ bool Player::apply_race(int race_id)
   race_file.open("race.csv");
   string value;
   bool id_found = false;
-  int i = 0;
+//  int i = 0; // unused according to g++
   string race;
 
   while(getline(race_file, value,','))
@@ -147,7 +147,7 @@ bool Player::apply_path(int path_id)
   ifstream path_file;
   path_file.open("path.csv");
   string value;
-  int i = 0;
+//  int i = 0; // unused according to g++
   string path;
   bool id_found = false;
 

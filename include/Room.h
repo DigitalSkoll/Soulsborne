@@ -17,7 +17,7 @@ class Room
     Item loot[MAX_ITEMS];
 
   public:
-    Room(Player soul = NULL);
+    Room(Player soul);
 
     void add_player(Player soul);
     void remove_player();
@@ -35,10 +35,15 @@ Room::Room(Player soul)
   spawn_loot();
 }
 
-void Room::add_player(Player soul) { this->s = &soul; }
-void Room::remove_player()         { this->s = NULL;  }
+void Room::add_player(Player soul) { this->p = &soul; }
+void Room::remove_player()         { this->p = NULL;  }
 
-void spawn_mobs()
+void Room::spawn_mobs()
 {
-  int num = (rand() % MAX_MOBS ) + 1;
+//  int num = (rand() % MAX_MOBS ) + 1; // unused according to g++
+}
+
+void Room::spawn_loot()
+{
+
 }
