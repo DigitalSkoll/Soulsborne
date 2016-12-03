@@ -1,11 +1,35 @@
 #include <iostream>
 #include <string>
 
-#include "../include/Map.h"
+#include "Map.h"
+
+bearing ctob(const char d)
+{
+  bearing ret;
+  switch(d)
+  {
+    case 'N':
+      ret = N;
+      break;
+    case 'S':
+      ret = S;
+      break;
+    case 'E':
+      ret = E;
+      break;
+    case 'W':
+      ret = W;
+      break;
+    default:
+      ret = FAIL;
+  }
+  return ret;
+}
 
 int main()
 {
-  Map m;
+  Player p;
+  Map m(p);
   char response;
   while (response != 'Q')
   {
@@ -18,7 +42,7 @@ int main()
       case 'E':
       case 'W':
         // intentional drop through
-        m.move(response);
+        m.move(ctob(response));
         break;
       case 'B':
         m.back();

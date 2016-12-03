@@ -8,13 +8,18 @@
 
 #define MAX_MOBS 3
 #define MAX_ITEMS 3
+#define NUM_DOORS 4
 
 class Room
 {
+  friend class Map;
   private:
     Player *p;
     Mob mobs[MAX_MOBS];
     Item loot[MAX_ITEMS];
+    Room * doors[NUM_DOORS];
+    Room * previous;
+    Room * next;
 
   public:
     Room(Player soul);
@@ -30,7 +35,13 @@ class Room
 
 Room::Room(Player soul)
 {
-  this->p = &soul;
+  this->p        = &soul;
+  this->previous = NULL;
+  this->next     = NULL;
+  for (int i = 0; i < NUM_DOORS; i++)
+  {
+    doors[i] = NULL;
+  }
   spawn_mobs();
   spawn_loot();
 }
@@ -44,6 +55,11 @@ void Room::spawn_mobs()
 }
 
 void Room::spawn_loot()
+{
+
+}
+
+Room::~Room()
 {
 
 }
