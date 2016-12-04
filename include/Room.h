@@ -2,7 +2,6 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
-#include "Player.h"
 #include "Mob.h"
 #include "Item.h"
 
@@ -13,37 +12,51 @@ class Room
 {
   private:
     Player *p;
+    int mob_size;
+    int loot_size;
     Mob mobs[MAX_MOBS];
     Item loot[MAX_ITEMS];
 
   public:
-    Room(Player soul);
+    Room();
 
-    void add_player(Player soul);
-    void remove_player();
 
     void spawn_mobs();
-    void spawn_loot();
+//  void spawn_loot();
 
-    ~Room();
+    void display_mobs();
+
+//    ~Room();
 };
 
-Room::Room(Player soul)
+Room::Room()
 {
-  this->p = &soul;
   spawn_mobs();
-  spawn_loot();
+//  spawn_loot();
 }
-
-void Room::add_player(Player soul) { this->p = &soul; }
-void Room::remove_player()         { this->p = NULL;  }
 
 void Room::spawn_mobs()
 {
-//  int num = (rand() % MAX_MOBS ) + 1; // unused according to g++
+  
+  Mob tmp;
+  this->mob_size = (rand() % MAX_MOBS ) + 1; 
+  for (int i = 0; i < this->mob_size; i++)
+  {
+    tmp.morph_mob();
+    mobs[i] = tmp;
+  }
 }
 
-void Room::spawn_loot()
+void Room::display_mobs()
 {
-
+  for (int i = 0; i < this->mob_size; i++)
+  {
+    mobs[i].print();
+    cout << endl;
+  }
 }
+
+//void Room::spawn_loot()
+//{
+//
+//}
