@@ -28,8 +28,7 @@ bearing ctob(const char d)
 
 int main()
 {
-  Player p;
-  Map m(p);
+  Map m;
   char response;
   while (response != 'Q')
   {

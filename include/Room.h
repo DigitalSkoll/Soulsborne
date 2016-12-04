@@ -13,7 +13,7 @@ class Room
 {
   friend class Map;
   private:
-    Player *p;
+//  Player *p;
     int mob_size;
     int loot_size;
     Mob mobs[MAX_MOBS];
@@ -23,7 +23,8 @@ class Room
     Room * next;
 
   public:
-    Room(Player soul);
+//    Room(Player soul);
+    Room();
 
 
     void spawn_mobs();
@@ -34,9 +35,10 @@ class Room
 //    ~Room();
 };
 
-Room::Room(Player soul)
+//Room::Room(Player soul)
+Room::Room()
 {
-  this->p        = &soul;
+//  this->p        = &soul;
   this->previous = NULL;
   this->next     = NULL;
   for (int i = 0; i < NUM_DOORS; i++)
