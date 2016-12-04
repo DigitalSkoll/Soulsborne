@@ -12,22 +12,28 @@
 #include <cstdlib>
 #include <time.h>
 #include "Item.h"
+#include "Equipment.h"
 
 
 class Entity
 {
 	protected:
-		std::string name; 	// Entity Name
-    int speed;          // speed 
-		int hp;			        // Health Points
-		int mp;			        // Mana Points
-		int armor;		      // reduce incoming damage to hp by this amount
-		int shield;		      // takes damage before health
-		int shield_armor;	  // reduce damage delt to shield
-		int base_attack;	  // basic damage delt
-		int wallet;		      // Money
-		bool dead;		      // alive or dead
-		vector<Item> list;	// Inventory
+		std::string name; 	    // Entity Name
+    int speed;              // speed 
+		int hp;			            // Health Points
+		int mp;			            // Mana Points
+		int armor;		          // reduce incoming damage to hp by this amount
+		int shield;		          // takes damage before health
+		int shield_armor;	      // reduce damage delt to shield
+		int base_attack;	      // basic damage delt
+		int wallet;		          // Money
+		bool dead;		          // alive or dead
+		vector<Item> list;	    // Inventory
+    vector<Equipment> gear; // Not used Gear
+    Equipment *left_hand;   // Equipment in Left Hand
+    Equipment *right_hand;  // Equipment in Right Hand
+    Equipment *body;        // Equipment in Body
+
 	public:
 		// Constructors
 		Entity();
@@ -63,13 +69,17 @@ class Entity
 		void take_damage_shield(int d); 		          // Entity Shield takes damage
 		void take_damage_hp(int d);			              // Entity HP takes damage
 		void print();					                        // Print info
-		void add_item(Item& i);				                // Add Item to inventory
-		void use_item(Item& i);				                // Apply item bonus to entity
+//	void add_item(Item& i);				                // Add Item to inventory
+//	void use_item(Item& i);				                // Apply item bonus to entity
 		void print_inven(int i);			                // print iventory item at index i
 		void print_inven(vector<Item>::iterator& it);	// print iventory item using iterator
 		void print_all_inven();				                // print every item in inventory
 		int num_inven();				                      // print number of items in inventory
-		int inven_cost();				                      // print total cost of items in inventory
+//	int inven_cost();				                      // print total cost of items in inventory
+    bool put_on(char pos, Equipment &eq);         // Put on eq at equip
+    bool take_off(char pos);                      // Take off what is at equip
+
+    void print_equip();
 
 };
 
@@ -87,6 +97,10 @@ Entity::Entity()
 	this->base_attack = 10;
 	this->dead = false;
 	this->wallet = 100;
+
+  this->left_hand = NULL;
+  this->right_hand = NULL;
+  this->body = NULL;
 }
 
 Entity::Entity(std::string n, int sp, int h, int m, int a, int s, int sa, int ba, int money)
@@ -214,29 +228,19 @@ void Entity::print()
 
 // use_item(Item& i)
 // apply the bonus of the item passed in to the entity
-void Entity::use_item(Item& i)
-{
-	this->armor += i.get_armor_bonus();
-	this->base_attack += i.get_attack_bonus();
-}
+//void Entity::use_item(Item& i)
+//{
+// Need to be re-written
+//}
 // add_item(Item& i)
 // test if the entity has enough money to buy the item
 // if entity has enough subtract cost of item from wallet
 // push item to the end of the vector and use the use_item(Item& i)
 // function to apply armor and attack bonus from item to entity
-void Entity::add_item(Item& i)
-{
-	if (this->wallet < i.get_cost())
-	{
-		std::cout << "[ERROR] Insufficent Funds for " << i.get_name() << endl;
-	}
-	else 
-	{
-		this->wallet -= i.get_cost();
-		list.push_back(i);
-		this->use_item(i);
-	}
-}
+//void Entity::add_item(Item& i)
+//{
+// Need to be re-written  
+//}
 
 // print_inven(int i)
 // print item from inventory at index i
@@ -266,11 +270,94 @@ void Entity::print_all_inven()
 	
 }
 
+// put_on(Equipment *equip, Equipment eq)
+// takes pointer to equipment and sets it to the address of eq
+// if equip is not NULL the equipment must first be removed
+// using the function take_off(Equipment *equip)
+// if equip is NULL equip is set to address of eq and the 
+// bonuses are applied to the Entity
+bool Entity::put_on(char pos, Equipment &eq)
+{
+  Equipment **equip = NULL;
+  switch (pos)
+  {
+    case 'l': 
+      *equip = this->left_hand;
+      break;
+    case 'r':
+      *equip = this->right_hand;
+      break;
+    case 'b':
+      *equip = this->body;
+    default:
+      cout << "Don't have that!\n";
+      return false;
+  }
+
+  if (*equip != NULL)
+  {
+    cout << "You already have something there!\n";
+    return false;
+  }
+  else
+  {
+    *equip = &eq;
+
+    this->base_attack     += (*equip)->get_attack_bonus();
+    this->shield          += (*equip)->get_shield_bonus();
+    this->armor           += (*equip)->get_armor_bonus();
+    this->shield_armor    += (*equip)->get_shield_armor_bonus();
+
+    return true;
+  }
+}
+// take_off(Equipment *equip)
+// if equip is NULL return false
+// if equip is not NULL, decrement stats
+// by the bonus, set equip to NULL, and return true
+bool Entity::take_off(char pos)
+{
+  Equipment *equip = NULL;
+  switch (pos)
+  {
+    case 'l': 
+      equip = this->left_hand;
+      break;
+    case 'r':
+      equip = this->right_hand;
+      break;
+    case 'b':
+      equip = this->body;
+    default:
+      cout << "Don't have that!\n";
+      return false;
+  }
+  if (equip == NULL)
+  {
+    cout << "Nothing is there!\n";
+    return false;
+  }
+  else
+  {
+    this->base_attack   -= equip->get_attack_bonus();
+    this->shield        -= equip->get_shield_bonus();
+    this->armor         -= equip->get_armor_bonus();
+    this->shield_armor  -= equip->get_shield_armor_bonus();
+
+    gear.push_back(*equip);
+    equip = NULL;
+
+    return true;
+  }
+
+}
+
 int Entity::num_inven()
 {
 	return list.size();
 }
 
+/*
 int Entity::inven_cost()
 {
 	int max = 0;
@@ -280,4 +367,15 @@ int Entity::inven_cost()
 
 	return max;
 	
+}
+*/
+
+void Entity::print_equip()
+{
+  if (this->right_hand != NULL)
+    cout << this->right_hand->get_name() << endl;
+  if (this->left_hand != NULL)
+    cout << this->left_hand->get_name() << endl;
+  if (this->body != NULL)
+    cout << this->body->get_name() << endl;
 }
