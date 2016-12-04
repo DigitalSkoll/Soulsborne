@@ -23,7 +23,7 @@ class Room
     Room * next;
 
   public:
-    Room();
+    Room(Player soul);
 
 
     void spawn_mobs();
@@ -34,10 +34,8 @@ class Room
 //    ~Room();
 };
 
-Room::Room()
+Room::Room(Player soul)
 {
-<<<<<<< HEAD
-=======
   this->p        = &soul;
   this->previous = NULL;
   this->next     = NULL;
@@ -45,7 +43,6 @@ Room::Room()
   {
     doors[i] = NULL;
   }
->>>>>>> 00631e8b1662c8a37e9990f4e38f03897efbafc6
   spawn_mobs();
 //  spawn_loot();
 }
@@ -66,19 +63,17 @@ void Room::display_mobs()
 {
   for (int i = 0; i < this->mob_size; i++)
   {
+    cout << i << ") ",
     mobs[i].print();
     cout << endl;
   }
 }
 
-<<<<<<< HEAD
 //void Room::spawn_loot()
 //{
 //
 //}
-=======
-Room::~Room()
-{
-
-}
->>>>>>> 00631e8b1662c8a37e9990f4e38f03897efbafc6
+//Room::~Room()
+//{
+//
+//}

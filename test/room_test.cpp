@@ -11,10 +11,10 @@ using namespace std;
 int main()
 {
   srand(time(NULL));
-  Room room;
   Player p_one;
   p_one.apply_race(2);
   p_one.apply_path(1);
+  Room room(p_one);
 
   room.display_mobs();
 

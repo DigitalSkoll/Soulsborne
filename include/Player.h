@@ -10,6 +10,9 @@
 #include <stdlib.h>
 #include "Entity.h"
 
+#define RACE_FILE "../data/race.csv"
+#define PATH_FILE "../data/path.csv"
+
 using namespace std;
 
 class Player : public Entity
@@ -20,6 +23,7 @@ class Player : public Entity
     int max_shield;
     string player_race;
     string player_path;
+
 
   public:
 
@@ -92,7 +96,7 @@ bool Player::apply_race(int race_id)
 {
 
   ifstream race_file;
-  race_file.open("race.csv");
+  race_file.open(RACE_FILE);
   string value;
   bool id_found = false;
 //  int i = 0; // unused according to g++
@@ -145,7 +149,7 @@ bool Player::apply_path(int path_id)
 {
 
   ifstream path_file;
-  path_file.open("path.csv");
+  path_file.open(PATH_FILE);
   string value;
 //  int i = 0; // unused according to g++
   string path;
