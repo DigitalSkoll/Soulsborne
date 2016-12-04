@@ -1,44 +1,53 @@
 #include <iostream>
 
+enum bearing
+{
+  N = 0,
+  S,
+  E,
+  W,
+  FAIL = -1
+};
+
 class Move
 {
   private:
-    char dir;
+    bearing dir;
   public:
-    Move(char d);
-    char direction() const;
-    char reverse() const;
+    Move(bearing d);
+    bearing direction() const;
+    bearing reverse() const;
 };
 
-Move::Move(char d)
+Move::Move(bearing d)
 {
   dir = d;
 }
 
-char Move::direction() const
+bearing Move::direction() const
 {
   return dir;
 }
 
-char Move::reverse() const
+bearing Move::reverse() const
 {
-  char reverse;
+  bearing reverse;
   switch (dir)
   {
-    case 'N':
-      reverse = 'S';
+    case N:
+      reverse = S;
       break;
-    case 'S':
-      reverse = 'N';
+    case S:
+      reverse = N;
       break;
-    case 'E':
-      reverse = 'W';
+    case E:
+      reverse = W;
       break;
-    case 'W':
-      reverse = 'E';
+    case W:
+      reverse = E;
       break;
     default:
-      reverse = '!';
+      reverse = FAIL;
   }
   return reverse;
 }

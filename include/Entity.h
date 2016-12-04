@@ -184,17 +184,13 @@ void Entity::take_damage_shield(int d)
 void Entity::take_damage_hp(int d)
 {
 	int damage;
-	if (this->shield > 0)
-		this->take_damage_shield(d);
-	else
-	{
-		damage = d - this->armor;
-		if (damage < 0)
-			damage = 0;
-		this->hp -= damage;
-		if (this->hp <= 0)
-			this->dead = true;
-	}
+	
+  damage = d - this->armor;
+  if (damage < 0)
+     damage = 0;
+	this->hp -= damage;
+	if (this->hp <= 0)
+		this->dead = true;
 }
 
 // print()

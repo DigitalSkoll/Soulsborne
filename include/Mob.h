@@ -39,6 +39,7 @@ class Mob : public Entity
 
     bool apply_race(int race_id);
     bool apply_path(int path_id);
+    void print();
 
     void morph_mob();
 };
@@ -69,7 +70,7 @@ bool Mob::apply_race(int race_id)
 {
 
   ifstream race_file;
-  race_file.open("race.csv");
+  race_file.open("../data/race.csv");
   string value;
   bool id_found = false;
 //  int i = 0; // unused according to g++
@@ -122,7 +123,7 @@ bool Mob::apply_path(int path_id)
 {
 
   ifstream path_file;
-  path_file.open("path.csv");
+  path_file.open("../data/path.csv");
   string value;
 //  int i = 0; // unused according to g++
   string path;
@@ -170,9 +171,14 @@ bool Mob::apply_path(int path_id)
   return id_found;
 }
 
+void Mob::print()
+{
+  cout << this->mob_race << " " << this->mob_path << endl;
+}
+
 void Mob::morph_mob()
 {
-  int rand_race = (rand() % 2) + 1;
+  int rand_race = (rand() % 5) + 1;
   int rand_path = (rand() % 2) + 1;
 
   this->apply_race(rand_race);
