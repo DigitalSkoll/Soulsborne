@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 
+using namespace std;
+
 class Equipment
 {
   private:
@@ -26,6 +28,10 @@ class Equipment
     int get_shield_bonus();
     int get_shield_armor_bonus();
     int get_dur();
+
+    void print();
+    void print_name();
+    void operator=(const Equipment &other);
 };
 
 Equipment::Equipment(string n, int att, int arm, int shi, int sab, int dur)
@@ -52,3 +58,26 @@ int Equipment::get_shield_bonus() { return this->shield_bonus; }
 int Equipment::get_shield_armor_bonus() { return this->shield_armor_bonus; }
 int Equipment::get_dur() { return this->dur; }
 
+
+void Equipment::operator=(const Equipment &other)
+{
+  this->name = other.name;
+  this->attack_bonus = other.attack_bonus;
+  this->shield_bonus = other.shield_bonus;
+  this->shield_armor_bonus = other.shield_armor_bonus;
+  this->dur = other.dur;
+}
+
+void Equipment::print()
+{
+  cout << this->name << endl;
+  cout << this->attack_bonus << endl;
+  cout << this->shield_bonus << endl;
+  cout << this->shield_armor_bonus << endl;
+  cout << this->dur << endl;
+}
+
+void Equipment::print_name()
+{
+  cout << this->name << endl;
+}

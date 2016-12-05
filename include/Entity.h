@@ -18,26 +18,28 @@
 class Entity
 {
 	protected:
-		std::string name; 	    // Entity Name
-    int speed;              // speed 
-		int hp;			            // Health Points
-		int mp;			            // Mana Points
-		int armor;		          // reduce incoming damage to hp by this amount
-		int shield;		          // takes damage before health
-		int shield_armor;	      // reduce damage delt to shield
-		int base_attack;	      // basic damage delt
-		int wallet;		          // Money
-		bool dead;		          // alive or dead
-		vector<Item> list;	    // Inventory
-    vector<Equipment> gear; // Not used Gear
-    Equipment *left_hand;   // Equipment in Left Hand
-    Equipment *right_hand;  // Equipment in Right Hand
-    Equipment *body;        // Equipment in Body
+		std::string name; 	            // Entity Name
+    int speed;                      // speed 
+		int hp;			                    // Health Points
+    int max_hp;                     // Max HP
+		int mp;			                    // Mana Points
+    int max_mp;                     // Max MP
+		int armor;		                  // reduce incoming damage to hp by this amount
+		int shield;		                  // takes damage before health
+    int max_shield;                 // Max Shield
+		int shield_armor;	              // reduce damage delt to shield
+		int base_attack;	              // basic damage delt
+		int wallet;		                  // Money
+		bool dead;		                  // alive or dead
+		vector<Item> list;	            // Inventory
+    vector<Equipment> gear;         // Not used Gear
+    Equipment left_hand;            // Equipment in Left Hand
+    Equipment right_hand;           // Equipment in Right Hand
+    Equipment body;                 // Equipment in Body
 
 	public:
 		// Constructors
-		Entity();
-		Entity(std::string n, int sp, int h, int m, int a, int s, int sa, int ba, int money);
+		Entity(std::string n="[ ]", int sp=0, int h=0, int m=0, int a=0, int s=0, int sa=0, int ba=0, int money=0);
 
     void setStats(int sp, int h, int m, int a, int s, int sa, int ba, int money);
 
@@ -69,8 +71,9 @@ class Entity
 		void take_damage_shield(int d); 		          // Entity Shield takes damage
 		void take_damage_hp(int d);			              // Entity HP takes damage
 		void print();					                        // Print info
-//	void add_item(Item& i);				                // Add Item to inventory
-//	void use_item(Item& i);				                // Apply item bonus to entity
+  	void add_item(Item& i);				                // Add Item to inventory
+    bool remove_item(int index);                  // Remove Item at index
+    bool use_item(int index); 		                // Apply item bonus to entity
 		void print_inven(int i);			                // print iventory item at index i
 		void print_inven(vector<Item>::iterator& it);	// print iventory item using iterator
 		void print_all_inven();				                // print every item in inventory
@@ -80,37 +83,26 @@ class Entity
     bool take_off(char pos);                      // Take off what is at equip
 
     void print_equip();
+    void print_gear(vector<Equipment>::iterator& eq);
+    void print_all_gear();
+    void add_gear(Equipment eq);
+    bool remove_gear(int index);
 
 };
 
 
 // Constructors
-Entity::Entity()
-{
-	this->name = "[ ]";
-  this->speed = 10;
-	this->hp = 10;
-	this->mp = 10;
-	this->armor = 10;
-	this->shield = 10;
-	this->shield_armor = 10;
-	this->base_attack = 10;
-	this->dead = false;
-	this->wallet = 100;
-
-  this->left_hand = NULL;
-  this->right_hand = NULL;
-  this->body = NULL;
-}
-
 Entity::Entity(std::string n, int sp, int h, int m, int a, int s, int sa, int ba, int money)
 {
 	this->name = n;
   this->speed = sp;
 	this->hp = h;
+  this->max_hp = this->hp;
 	this->mp = m;
+  this->max_mp = this->mp;
 	this->armor = a;
 	this->shield = s;
+  this->max_shield = this->shield;
 	this->shield_armor = sa;
 	this->base_attack = ba;
 	this->dead = false;
@@ -226,21 +218,47 @@ void Entity::print()
 		std::cout << "Status: 	Alive\n";
 }
 
-// use_item(Item& i)
-// apply the bonus of the item passed in to the entity
-//void Entity::use_item(Item& i)
-//{
-// Need to be re-written
-//}
+// use_item(int index)
+// apply the bonus of the item at index in list 
+bool Entity::use_item(int index)
+{
+  if (index > this->list.size() || index <= 0)
+  {
+    cout << "Invlaid index\n";
+    return false;
+  }
+  this->hp += list[index-1].get_hp_gain();
+  this->mp += list[index-1].get_mp_gain();
+  this->shield += list[index-1].get_shield_gain();
+  if(this->hp > this->max_hp)
+    this->hp = this->max_hp;
+  if (this->mp > this->max_mp)
+    this->mp = this->max_mp;
+  if (this->shield > this->max_shield)
+    this->shield = this->max_shield;
+  this->remove_item(index);
+  return true;
+}
 // add_item(Item& i)
 // test if the entity has enough money to buy the item
 // if entity has enough subtract cost of item from wallet
 // push item to the end of the vector and use the use_item(Item& i)
 // function to apply armor and attack bonus from item to entity
-//void Entity::add_item(Item& i)
-//{
-// Need to be re-written  
-//}
+void Entity::add_item(Item& i)
+{
+  this->list.push_back(i);
+}
+
+bool Entity::remove_item(int index)
+{
+  if (index > list.size() || index <=0)
+  {
+    cout << "Invalid Index\n";
+    return false;
+  }
+  this->list.erase(list.begin() + (index - 1));
+  return true;
+}
 
 // print_inven(int i)
 // print item from inventory at index i
@@ -256,7 +274,7 @@ void Entity::print_inven(int i)
 // a vector iterator
 void Entity::print_inven(vector<Item>::iterator& it)
 {
-	it->print();
+  cout << (it - list.begin()) + 1 << ": " << it->get_name() << endl;
 }
 
 // print_all_inven()
@@ -269,8 +287,22 @@ void Entity::print_all_inven()
 		this->print_inven(it);
 	
 }
+// print gear
+void Entity::print_gear(vector<Equipment>::iterator& eq)
+{
+  cout << (eq - gear.begin()) + 1 << ": ";
+	eq->print_name();
+}
 
-// put_on(Equipment *equip, Equipment eq)
+// print_all_gear
+void Entity::print_all_gear()
+{
+	vector<Equipment>::iterator eq;
+	for (eq =this->gear.begin(); eq < this->gear.end(); eq++)
+		this->print_gear(eq);
+	
+}
+
 // takes pointer to equipment and sets it to the address of eq
 // if equip is not NULL the equipment must first be removed
 // using the function take_off(Equipment *equip)
@@ -278,35 +310,37 @@ void Entity::print_all_inven()
 // bonuses are applied to the Entity
 bool Entity::put_on(char pos, Equipment &eq)
 {
-  Equipment **equip = NULL;
+  Equipment *equip = NULL;
   switch (pos)
   {
     case 'l': 
-      *equip = this->left_hand;
+      equip = &this->left_hand;
       break;
     case 'r':
-      *equip = this->right_hand;
+      equip = &this->right_hand;
       break;
     case 'b':
-      *equip = this->body;
+      equip = &this->body;
+      break;
     default:
       cout << "Don't have that!\n";
       return false;
   }
 
-  if (*equip != NULL)
+  if (equip->get_name() != "[ ]")
   {
     cout << "You already have something there!\n";
     return false;
   }
   else
   {
-    *equip = &eq;
+    *equip = eq;
 
-    this->base_attack     += (*equip)->get_attack_bonus();
-    this->shield          += (*equip)->get_shield_bonus();
-    this->armor           += (*equip)->get_armor_bonus();
-    this->shield_armor    += (*equip)->get_shield_armor_bonus();
+    this->base_attack  += equip->get_attack_bonus();
+    this->shield       += equip->get_shield_bonus();
+    this->max_shield   += equip->get_shield_bonus();
+    this->armor        += equip->get_armor_bonus();
+    this->shield_armor += equip->get_shield_armor_bonus();
 
     return true;
   }
@@ -321,31 +355,35 @@ bool Entity::take_off(char pos)
   switch (pos)
   {
     case 'l': 
-      equip = this->left_hand;
+      equip = &this->left_hand;
       break;
     case 'r':
-      equip = this->right_hand;
+      equip = &this->right_hand;
       break;
     case 'b':
-      equip = this->body;
+      equip = &this->body;
+      break;
     default:
       cout << "Don't have that!\n";
       return false;
   }
-  if (equip == NULL)
+  if (equip->get_name() == "[ ]")
   {
     cout << "Nothing is there!\n";
     return false;
   }
   else
   {
-    this->base_attack   -= equip->get_attack_bonus();
-    this->shield        -= equip->get_shield_bonus();
-    this->armor         -= equip->get_armor_bonus();
-    this->shield_armor  -= equip->get_shield_armor_bonus();
+    this->base_attack  -= equip->get_attack_bonus();
+    this->shield       -= equip->get_shield_bonus();
+    this->max_shield   -= equip->get_shield_bonus();
+    this->armor        -= equip->get_armor_bonus();
+    this->shield_armor -= equip->get_shield_armor_bonus();
 
-    gear.push_back(*equip);
-    equip = NULL;
+    this->gear.push_back(*equip);
+    Equipment tmp("[ ]");
+
+    *equip = tmp;
 
     return true;
   }
@@ -357,25 +395,27 @@ int Entity::num_inven()
 	return list.size();
 }
 
-/*
-int Entity::inven_cost()
-{
-	int max = 0;
-	vector<Item>::iterator it;
-	for (it =this->list.begin(); it < this->list.end(); it++)
-		max += it->get_cost();
-
-	return max;
-	
-}
-*/
-
 void Entity::print_equip()
 {
-  if (this->right_hand != NULL)
-    cout << this->right_hand->get_name() << endl;
-  if (this->left_hand != NULL)
-    cout << this->left_hand->get_name() << endl;
-  if (this->body != NULL)
-    cout << this->body->get_name() << endl;
+  cout << this->right_hand.get_name() << endl;
+  cout << this->left_hand.get_name() << endl;
+  cout << this->body.get_name() << endl;
 }
+
+void Entity::add_gear(Equipment eq)
+{
+  this->gear.push_back(eq);
+}
+
+
+bool Entity::remove_gear(int index)
+{
+  if (index > gear.size() || index <=0)
+  {
+    cout << "Invalid Index\n";
+    return false;
+  }
+  this->gear.erase(gear.begin() + (index - 1));
+  return true;
+}
+
