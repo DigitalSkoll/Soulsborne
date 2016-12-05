@@ -40,6 +40,8 @@ class Map
     void back();
     void move(const bearing);
     void print_history();
+    void reset();
+    void respawn();
     ~Map();
 };
 
@@ -114,7 +116,6 @@ void Map::move(const bearing d)
       }
       // set current to room at door d
       this->current = this->current->doors[d];
-      
       std::cout << "You went " << direction_ctos(d) << std::endl;
     }
   }
@@ -154,13 +155,35 @@ void Map::print_history()
   }
 }
 
+void Map::reset()
+{
+  Room * prev;
+  this->current = this->head->next;
+  while (this->current->next != NULL)
+  {
+    prev          = this->current;
+    this->current = this->current->next;
+    delete prev;
+  }
+  this->respawn();
+}
+
+void Map::respawn()
+{
+  while (!this->movement_history.is_empty())
+  {
+    this->movement_history.pop();
+  }
+  this->current = this->head;
+}
+
 Map::~Map()
 {
   Room * prev;
   this->current = this->head;
   while (this->current->next != NULL)
   {
-    prev = this->current->previous;
+    prev          = this->current;
     this->current = this->current->next;
     delete prev;
   }
