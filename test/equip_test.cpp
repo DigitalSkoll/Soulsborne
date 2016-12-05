@@ -12,16 +12,27 @@ int main()
   p_one.apply_path(1);
 
   Equipment sword("sword", 20, 0, 0, 0, 5);
+  Equipment shield("shield", 0, 0, 20, 5, 5);
+  Equipment leather("leather", 0, 20, 0, 5);
 
-  p_one.print();
-  cout << endl;
+  p_one.add_gear(sword);
+  p_one.add_gear(shield);
+  p_one.add_gear(leather);
 
-  p_one.put_on('r', sword);
+  p_one.print_all_gear();
 
-  p_one.print();
-  cout << endl;
+  int ans;
+  cout << "Remove Gear: ";
+  cin >> ans;
 
-  p_one.print_equip();
+  p_one.remove_gear(ans);
+  p_one.print_all_gear();
+
+  cout << "Remove Gear: ";
+  cin >> ans;
+
+  p_one.remove_gear(ans);
+  p_one.print_all_gear();
 
   return 0;
 }
