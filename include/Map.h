@@ -42,6 +42,7 @@ class Map
     void print_history();
     void reset();
     void respawn();
+    void scan_doors();
     ~Map();
 };
 
@@ -157,15 +158,22 @@ void Map::print_history()
 
 void Map::reset()
 {
-  Room * prev;
-  this->current = this->head->next;
-  while (this->current->next != NULL)
+  if (this->head->next != NULL)
   {
-    prev          = this->current;
-    this->current = this->current->next;
-    delete prev;
+    Room * prev;
+    this->current = this->head->next;
+    while (this->current->next != NULL)
+    {
+      prev          = this->current;
+      this->current = this->current->next;
+      delete prev;
+    }
+    this->respawn();
   }
-  this->respawn();
+  else
+  {
+    std::cout << "Nothing to reset.\n";
+  }
 }
 
 void Map::respawn()
@@ -175,6 +183,39 @@ void Map::respawn()
     this->movement_history.pop();
   }
   this->current = this->head;
+}
+
+void Map::scan_doors()
+{
+  for (size_t i = 0; i < 4; i++)
+  {
+    switch (i)
+    {
+      case N:
+        std::cout << "North ";
+        break;
+      case S:
+        std::cout << "South ";
+        break;
+      case E:
+        std::cout << "East ";
+        break;
+      case W:
+        std::cout << "West ";
+        break;
+      default:
+        std::cout << "Something went wring in Map::scam_doors.\n";
+    }
+    std::cout << "door: ";
+    if (this->current->doors[i] == NULL)
+    {
+      std::cout << "CLOSED\n";
+    }
+    else
+    {
+      std::cout << "OPEN\n";
+    }
+  }
 }
 
 Map::~Map()

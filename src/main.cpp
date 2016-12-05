@@ -55,6 +55,9 @@ int main()
       case 'R':
         m.respawn();
         break;
+      case 'L':
+        m.scan_doors();
+        break;
       case 'Q':
         std::cout << "Good Bye\n";
         break;
