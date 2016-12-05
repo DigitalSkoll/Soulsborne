@@ -17,68 +17,68 @@
 
 class Entity
 {
-	protected:
-		std::string name; 	            // Entity Name
+  protected:
+    std::string name;               // Entity Name
     int speed;                      // speed 
-		int hp;			                    // Health Points
+    int hp;                         // Health Points
     int max_hp;                     // Max HP
-		int mp;			                    // Mana Points
+    int mp;                         // Mana Points
     int max_mp;                     // Max MP
-		int armor;		                  // reduce incoming damage to hp by this amount
-		int shield;		                  // takes damage before health
+    int armor;                      // reduce incoming damage to hp by this amount
+    int shield;                     // takes damage before health
     int max_shield;                 // Max Shield
-		int shield_armor;	              // reduce damage delt to shield
-		int base_attack;	              // basic damage delt
-		int wallet;		                  // Money
-		bool dead;		                  // alive or dead
-		vector<Item> list;	            // Inventory
+    int shield_armor;               // reduce damage delt to shield
+    int base_attack;                // basic damage delt
+    int wallet;                     // Money
+    bool dead;                      // alive or dead
+    vector<Item> list;              // Inventory
     vector<Equipment> gear;         // Not used Gear
     Equipment left_hand;            // Equipment in Left Hand
     Equipment right_hand;           // Equipment in Right Hand
     Equipment body;                 // Equipment in Body
 
-	public:
-		// Constructors
-		Entity(std::string n="[ ]", int sp=0, int h=0, int m=0, int a=0, int s=0, int sa=0, int ba=0, int money=0);
+  public:
+    // Constructors
+    Entity(std::string n="[ ]", int sp=0, int h=0, int m=0, int a=0, int s=0, int sa=0, int ba=0, int money=0);
 
     void setStats(int sp, int h, int m, int a, int s, int sa, int ba, int money);
 
-		// Getters
-		std::string get_name();
+    // Getters
+    std::string get_name();
     int get_speed();
-		int get_hp();
-		int get_mp();
-		int get_armor();
-		int get_shield();
-		int get_shield_armor();
-		int get_base_attack();
-		bool is_dead();
-		int get_wallet();
+    int get_hp();
+    int get_mp();
+    int get_armor();
+    int get_shield();
+    int get_shield_armor();
+    int get_base_attack();
+    bool is_dead();
+    int get_wallet();
 
-		// Setters
-		void set_name(std::string n);
+    // Setters
+    void set_name(std::string n);
     void set_speed(int sp);
-		void set_hp(int h);
-		void set_mp(int m);
-		void set_armor(int a);
-		void set_shield(int s);
-		void set_shield_armor(int sa);
-		void set_base_attack(int ba);
-		void set_dead(bool d);
-		void set_wallet(int m);
+    void set_hp(int h);
+    void set_mp(int m);
+    void set_armor(int a);
+    void set_shield(int s);
+    void set_shield_armor(int sa);
+    void set_base_attack(int ba);
+    void set_dead(bool d);
+    void set_wallet(int m);
 
-		int attack();					                        // Entity returns attack
-		void take_damage_shield(int d); 		          // Entity Shield takes damage
-		void take_damage_hp(int d);			              // Entity HP takes damage
-		void print();					                        // Print info
-  	void add_item(Item& i);				                // Add Item to inventory
-    bool remove_item(int index);                  // Remove Item at index
-    bool use_item(int index); 		                // Apply item bonus to entity
-		void print_inven(int i);			                // print iventory item at index i
-		void print_inven(vector<Item>::iterator& it);	// print iventory item using iterator
-		void print_all_inven();				                // print every item in inventory
-		int num_inven();				                      // print number of items in inventory
-//	int inven_cost();				                      // print total cost of items in inventory
+    int attack();                                 // Entity returns attack
+    void take_damage_shield(int d);               // Entity Shield takes damage
+    void take_damage_hp(int d);                   // Entity HP takes damage
+    void print();                                 // Print info
+    void add_item(Item& i);                       // Add Item to inventory
+    bool remove_item(unsigned int index);                  // Remove Item at index
+    bool use_item(unsigned int index);                    // Apply item bonus to entity
+    void print_inven(int i);                      // print iventory item at index i
+    void print_inven(vector<Item>::iterator& it); // print iventory item using iterator
+    void print_all_inven();                       // print every item in inventory
+    int num_inven();                              // print number of items in inventory
+//  int inven_cost();                             // print total cost of items in inventory
     bool put_on(char pos, Equipment &eq);         // Put on eq at equip
     bool take_off(char pos);                      // Take off what is at equip
 
@@ -86,7 +86,7 @@ class Entity
     void print_gear(vector<Equipment>::iterator& eq);
     void print_all_gear();
     void add_gear(Equipment eq);
-    bool remove_gear(int index);
+    bool remove_gear(unsigned int index);
 
 };
 
@@ -94,31 +94,31 @@ class Entity
 // Constructors
 Entity::Entity(std::string n, int sp, int h, int m, int a, int s, int sa, int ba, int money)
 {
-	this->name = n;
+  this->name = n;
   this->speed = sp;
-	this->hp = h;
+  this->hp = h;
   this->max_hp = this->hp;
-	this->mp = m;
+  this->mp = m;
   this->max_mp = this->mp;
-	this->armor = a;
-	this->shield = s;
+  this->armor = a;
+  this->shield = s;
   this->max_shield = this->shield;
-	this->shield_armor = sa;
-	this->base_attack = ba;
-	this->dead = false;
-	this->wallet = money;
+  this->shield_armor = sa;
+  this->base_attack = ba;
+  this->dead = false;
+  this->wallet = money;
 }
 
 void Entity::setStats(int sp, int h, int m, int a, int s, int sa, int ba, int money)
 {
   this->speed = sp;
-	this->hp = h;
-	this->mp = m;
-	this->armor = a;
-	this->shield = s;
-	this->shield_armor = sa;
-	this->base_attack = ba;
-	this->wallet = money;
+  this->hp = h;
+  this->mp = m;
+  this->armor = a;
+  this->shield = s;
+  this->shield_armor = sa;
+  this->base_attack = ba;
+  this->wallet = money;
 }
 
 // Getters
@@ -152,11 +152,11 @@ void Entity::set_wallet(int m) { this->wallet = m; }
 int Entity::attack()
 {
 
-	int dice = rand()%20 + 1;
-	if (dice >= 10)
-		return this->base_attack;
-	else
-		return 0;
+  int dice = rand()%20 + 1;
+  if (dice >= 10)
+    return this->base_attack;
+  else
+    return 0;
 }
 
 // take_damage_shield(int d)
@@ -164,23 +164,23 @@ int Entity::attack()
 // this will call take_damage_hp(int d) if shield is 0
 void Entity::take_damage_shield(int d)
 {
-	int damage;
-	if (this->shield <= 0)
-		this->take_damage_hp(d);
-	else
-	{
-		damage = d - this->shield_armor;
-		if (damage < 0)
-			damage = 0;
-		this->shield -= damage;
-		if (this->shield < 0)
-		{
-			damage = -1 * this->shield;
-			this->shield = 0;
-			this->take_damage_hp(damage);
-		}
+  int damage;
+  if (this->shield <= 0)
+    this->take_damage_hp(d);
+  else
+  {
+    damage = d - this->shield_armor;
+    if (damage < 0)
+      damage = 0;
+    this->shield -= damage;
+    if (this->shield < 0)
+    {
+      damage = -1 * this->shield;
+      this->shield = 0;
+      this->take_damage_hp(damage);
+    }
 
-	}
+  }
 
 }
 
@@ -189,38 +189,38 @@ void Entity::take_damage_shield(int d)
 // before return take_damage will test if player is dead or not
 void Entity::take_damage_hp(int d)
 {
-	int damage;
-	
+  int damage;
+  
   damage = d - this->armor;
   if (damage < 0)
      damage = 0;
-	this->hp -= damage;
-	if (this->hp <= 0)
-		this->dead = true;
+  this->hp -= damage;
+  if (this->hp <= 0)
+    this->dead = true;
 }
 
 // print()
 // print out basic info about the entity
 void Entity::print()
 {
-	std::cout << "Name: 		" << this->name << std::endl;
+  std::cout << "Name:     " << this->name << std::endl;
   std::cout << "Speed:          " << this->speed << std::endl;
-	std::cout << "HP: 		" << this->hp << std::endl;
-	std::cout << "MP: 		" << this->mp << std::endl;
-	std::cout << "Wallet:		" << this->wallet << std::endl;
-	std::cout << "Armor: 		" << this->armor << std::endl;
-	std::cout << "Shield: 	" << this->shield << std::endl;
-	std::cout << "Shield Armor: 	" << this->shield_armor << std::endl;
-	std::cout << "Base Attack: 	" << this->base_attack << std::endl;
-	if (is_dead())
-		std::cout << "Status: 	Dead\n";
-	else
-		std::cout << "Status: 	Alive\n";
+  std::cout << "HP:     " << this->hp << std::endl;
+  std::cout << "MP:     " << this->mp << std::endl;
+  std::cout << "Wallet:   " << this->wallet << std::endl;
+  std::cout << "Armor:    " << this->armor << std::endl;
+  std::cout << "Shield:   " << this->shield << std::endl;
+  std::cout << "Shield Armor:   " << this->shield_armor << std::endl;
+  std::cout << "Base Attack:  " << this->base_attack << std::endl;
+  if (is_dead())
+    std::cout << "Status:   Dead\n";
+  else
+    std::cout << "Status:   Alive\n";
 }
 
 // use_item(int index)
 // apply the bonus of the item at index in list 
-bool Entity::use_item(int index)
+bool Entity::use_item(unsigned int index)
 {
   if (index > this->list.size() || index <= 0)
   {
@@ -249,7 +249,7 @@ void Entity::add_item(Item& i)
   this->list.push_back(i);
 }
 
-bool Entity::remove_item(int index)
+bool Entity::remove_item(unsigned int index)
 {
   if (index > list.size() || index <=0)
   {
@@ -266,7 +266,7 @@ bool Entity::remove_item(int index)
 // to print out the item information
 void Entity::print_inven(int i)
 {
-	this->list[i].print();
+  this->list[i].print();
 }
 
 // print_inven(vector<Item>::iterator& it)
@@ -282,25 +282,25 @@ void Entity::print_inven(vector<Item>::iterator& it)
 // and print_inven(vector<Item>::iterator& it)
 void Entity::print_all_inven()
 {
-	vector<Item>::iterator it;
-	for (it =this->list.begin(); it < this->list.end(); it++)
-		this->print_inven(it);
-	
+  vector<Item>::iterator it;
+  for (it =this->list.begin(); it < this->list.end(); it++)
+    this->print_inven(it);
+  
 }
 // print gear
 void Entity::print_gear(vector<Equipment>::iterator& eq)
 {
   cout << (eq - gear.begin()) + 1 << ": ";
-	eq->print_name();
+  eq->print_name();
 }
 
 // print_all_gear
 void Entity::print_all_gear()
 {
-	vector<Equipment>::iterator eq;
-	for (eq =this->gear.begin(); eq < this->gear.end(); eq++)
-		this->print_gear(eq);
-	
+  vector<Equipment>::iterator eq;
+  for (eq =this->gear.begin(); eq < this->gear.end(); eq++)
+    this->print_gear(eq);
+  
 }
 
 // takes pointer to equipment and sets it to the address of eq
@@ -392,7 +392,7 @@ bool Entity::take_off(char pos)
 
 int Entity::num_inven()
 {
-	return list.size();
+  return list.size();
 }
 
 void Entity::print_equip()
@@ -408,7 +408,7 @@ void Entity::add_gear(Equipment eq)
 }
 
 
-bool Entity::remove_gear(int index)
+bool Entity::remove_gear(unsigned int index)
 {
   if (index > gear.size() || index <=0)
   {
