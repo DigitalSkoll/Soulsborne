@@ -128,21 +128,28 @@ void Map::move(const bearing d)
 
 void Map::print_history()
 {
-  const std::vector<Move> v = this->movement_history.raw_vector();
-  std::vector<Move>::const_iterator iter;
-  for (iter = v.begin(); iter != v.end(); iter++)
+  if (this->movement_history.is_empty())
   {
-    switch ((* iter).direction())
+    std::cout << "There is no history.\n";
+  }
+  else
+  {
+    const std::vector<Move> v = this->movement_history.raw_vector();
+    std::vector<Move>::const_iterator iter;
+    for (iter = v.begin(); iter != v.end(); iter++)
     {
-      case N:
-      case S:
-      case E:
-      case W:
-        std::cout << direction_ctos((* iter).direction()) << '\n';
-        break;
-      default:
-        std::cout << "Something went wrong in Map::print_history\n";
-        exit(1);
+      switch ((* iter).direction())
+      {
+        case N:
+        case S:
+        case E:
+        case W:
+          std::cout << direction_ctos((* iter).direction()) << '\n';
+          break;
+        default:
+          std::cout << "Something went wrong in Map::print_history\n";
+          exit(1);
+      }
     }
   }
 }
