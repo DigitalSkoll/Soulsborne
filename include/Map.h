@@ -158,21 +158,18 @@ void Map::print_history()
 
 void Map::reset()
 {
-  if (this->head->next != NULL)
+  Room * prev;
+  this->current = this->head->next;
+  while (this->current->next != NULL)
   {
-    Room * prev;
-    this->current = this->head->next;
-    while (this->current->next != NULL)
-    {
-      prev          = this->current;
-      this->current = this->current->next;
-      delete prev;
-    }
-    this->respawn();
+    prev          = this->current;
+    this->current = this->current->next;
+    delete prev;
   }
-  else
+  this->respawn();
+  for (size_t i = 0; i < 4; i++)
   {
-    std::cout << "Nothing to reset.\n";
+    this->current->doors[i] = NULL;
   }
 }
 
