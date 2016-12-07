@@ -1,0 +1,4 @@
+ID,Name,hp_gain,mp_gain,shield_gain
+0,health potion,5,0,0
+1,mana potion,0,5,0
+2,repair powder,0,0,5
