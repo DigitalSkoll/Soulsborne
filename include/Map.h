@@ -34,7 +34,7 @@ class Map
     Room * head;
     Room * current;
   public:
-    Map(Player p);
+    Map();
     Room * get_current() const;
     Room * get_head() const;
     void back();
@@ -43,11 +43,12 @@ class Map
     ~Map();
 };
 
-Map::Map(Player p)
+Map::Map()
 {
-  this->head = new Room(p);
-  this->current = this->head;
-  this->head->previous = this->head;
+  this->head            = new Room();
+  this->current         = this->head;
+  this->head->previous  = this->head;
+  this->head->next      = NULL;
 }
 
 Room * Map::get_current() const
@@ -88,41 +89,41 @@ void Map::back()
 
 void Map::move(const bearing d)
 {
-  if (!this->movement_history.is_empty() && this->movement_history.top().reverse() == d)
+  if (!this->movement_history.is_empty())
   {
-    this->back();
-  }
-  else
-  {
-    if (this->current->doors[d] == NULL)
-    {
-      this->current->doors[d] = new Room();
-      this->head->previous->next = this->current;
-      this->head->previous = this->current;
-    }
-    this->current = this->current->doors[d];
-    this->movement_history.push(Move(d));
-    std::cout << "You went " << direction_ctos(d) << std::endl;
-  }
-  /*
-  if (!movement_history.is_empty())
-  {
-    if (movement_history.top().reverse() == d)
+    if (this->movement_history.top().reverse() == d)
     {
       this->back();
     }
     else
     {
-      movement_history.push(Move(d));
+      mv:
+      this->movement_history.push(Move(d));
+      if (this->current->doors[d] == NULL)
+      {
+        // create new room at door d
+        this->current->doors[d] = new Room();
+        // point new room prev to old last node
+        this->current->doors[d]->previous = this->head->previous;
+        // link new room door reverse d to current
+        this->current->doors[d]->doors[this->movement_history.top().reverse()] = this->current;
+        // point old last node next to new last node
+        this->head->previous->next    = this->current->doors[d];
+        // point  new room next to null
+        this->current->doors[d]->next = NULL;
+      }
+      // set current to room at door d
+      this->current = this->current->doors[d];
+      
       std::cout << "You went " << direction_ctos(d) << std::endl;
     }
   }
   else
   {
-    movement_history.push(Move(d));
-    std::cout << "You went " << direction_ctos(d) << std::endl;
+    // I don't like using goto in this, but it's the easiest thing in this case
+    // and it's not that bad here tbh
+    goto mv;
   }
-  */
 }
 
 void Map::print_history()
@@ -150,7 +151,7 @@ Map::~Map()
 {
   Room * prev;
   this->current = this->head;
-  while (this->current != NULL)
+  while (this->current->next != NULL)
   {
     prev = this->current->previous;
     this->current = this->current->next;
