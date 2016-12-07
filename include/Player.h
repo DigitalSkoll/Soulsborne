@@ -9,9 +9,7 @@
 #include <fstream>
 #include <stdlib.h>
 #include "Entity.h"
-
-#define RACE_FILE "../data/race.csv"
-#define PATH_FILE "../data/path.csv"
+#include "Role.h"
 
 using namespace std;
 
@@ -75,111 +73,41 @@ string Player::getPath()     { return this->player_path; }
 
 bool Player::apply_race(int race_id)
 {
-
-  ifstream race_file;
-  race_file.open(RACE_FILE);
-  string value;
-  bool id_found = false;
-//  int i = 0; // unused according to g++
-  string race;
-
-  while(getline(race_file, value,','))
+  if (races.empty())
   {
-    if (value == to_string(race_id))
-    {
-      id_found = true;
-      // get race
-      getline(race_file, race,',');
-      this->player_race = race,
-      // get speed
-      getline(race_file, value, ',');
-      this->speed = atoi(value.c_str());
-      // get hp
-      getline(race_file, value, ',');
-      this->hp = atoi(value.c_str());
-      this->max_hp = this->hp;
-      // get mp
-      getline(race_file, value, ',');
-      this->mp = atoi(value.c_str());
-      this->max_mp = this->mp;
-      // get wallet 
-      getline(race_file, value, ',');
-      this->wallet = atoi(value.c_str());
-      // get armor 
-      getline(race_file, value, ',');
-      this->armor = atoi(value.c_str());
-      // get shield 
-      getline(race_file, value, ',');
-      this->shield = atoi(value.c_str());
-      this->max_shield = this->shield;
-      // get shield armor 
-      getline(race_file, value, ',');
-      this->shield_armor = atoi(value.c_str());
-      // get base attack 
-      getline(race_file, value, ',');
-      this->base_attack = atoi(value.c_str());
-    }
-    else
-      getline(race_file, value);
+    cerr << "No Race\n";
+    return false;
   }
+  this->player_race   = races[race_id].name;
+  this->hp            = races[race_id].hp;
+  this->mp            = races[race_id].mp;
+  this->armor         = races[race_id].armor;
+  this->shield        = races[race_id].shield;  
+  this->shield_armor  = races[race_id].shield_armor;  
+  this->wallet        = races[race_id].wallet;
+  this->base_attack   = races[race_id].attack;
+  this->speed         = races[race_id].speed;
 
-  race_file.close();
-
-  return id_found;
+  return true;
 
 }
 
 bool Player::apply_path(int path_id)
 {
-
-  ifstream path_file;
-  path_file.open(PATH_FILE);
-  string value;
-//  int i = 0; // unused according to g++
-  string path;
-  bool id_found = false;
-
-  while(getline(path_file, value,','))
+  if (paths.empty())
   {
-    if (value == to_string(path_id))
-    {
-      id_found = true;
-      // get path
-      getline(path_file, path,',');
-      this->player_path = path;
-      // get speed 
-      getline(path_file, value, ',');
-      this->speed += atoi(value.c_str());
-      // get hp
-      getline(path_file, value, ',');
-      this->hp += atoi(value.c_str());
-      this->max_hp = this->hp;
-      // get mp
-      getline(path_file, value, ',');
-      this->mp += atoi(value.c_str());
-      this->max_mp = this->mp;
-      // get wallet 
-      getline(path_file, value, ',');
-      this->wallet += atoi(value.c_str());
-      // get armor 
-      getline(path_file, value, ',');
-      this->armor += atoi(value.c_str());
-      // get shield 
-      getline(path_file, value, ',');
-      this->shield += atoi(value.c_str());
-      this->max_shield = this->shield;
-      // get shield armor 
-      getline(path_file, value, ',');
-      this->shield_armor += atoi(value.c_str());
-      // get base attack 
-      getline(path_file, value, ',');
-      this->base_attack += atoi(value.c_str());
-    }
-    else
-      getline(path_file, value);
+    cerr << "No Path\n";
+    return false;
   }
+  this->player_path    = paths[path_id].name;
+  this->hp            += paths[path_id].hp;
+  this->mp            += paths[path_id].mp;
+  this->armor         += paths[path_id].armor;
+  this->shield        += paths[path_id].shield;  
+  this->shield_armor  += paths[path_id].shield_armor;  
+  this->wallet        += paths[path_id].wallet;
+  this->base_attack   += paths[path_id].attack;
+  this->speed         += paths[path_id].speed;
 
-  path_file.close();
-
-  return id_found;
+  return true;
 }
