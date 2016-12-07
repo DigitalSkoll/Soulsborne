@@ -71,6 +71,8 @@ void load_races(string file_name = RACE)
     r.speed        = atoi(field[9].c_str());
     races.push_back(r);
   }
+
+  race_in.close();
 }
 
 // Handle Paths
@@ -127,6 +129,8 @@ void load_paths(string file_name = PATH)
     p.speed        = atoi(field[9].c_str());
     paths.push_back(p);
   }
+
+  path_in.close();
 }
 
 // Handle Items
@@ -144,7 +148,7 @@ vector<item> items;
 void load_items(string file_name = ITEM)
 {
   ifstream item_in;
-  path_in.open(file_name.c_str());
+  item_in.open(file_name.c_str());
   string line;
   string field[FIELD_I];
   size_t pos;
