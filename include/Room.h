@@ -36,7 +36,7 @@ class Room
   public:
 //    Room(Player soul);
     Room(room_type t);
-
+    room_type get_type();
 
     void spawn_boss();
     void spawn_mobs();
@@ -75,6 +75,11 @@ Room::Room(room_type t)
     default:
       std::cout << "Something went terribly wrong in Room::Room(room_type t)\n";
   }
+}
+
+room_type Room::get_type()
+{
+  return this->type;
 }
 
 void Room::spawn_boss()

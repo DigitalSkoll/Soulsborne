@@ -193,7 +193,10 @@ void Map::respawn()
   {
     this->movement_history.pop();
   }
+
   this->current = this->head;
+
+  player.refresh();
 }
 
 void Map::scan_doors()

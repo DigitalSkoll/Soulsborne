@@ -42,6 +42,8 @@ class Player : public Entity
     bool apply_race(int race_id);
     bool apply_path(int path_id);
 
+    void refresh();
+
 };
 
 //=======================================================================================================================
@@ -110,4 +112,11 @@ bool Player::apply_path(int path_id)
   this->speed         += paths[path_id].speed;
 
   return true;
+}
+
+void Player::refresh()
+{
+  this->hp     = this->max_hp;
+  this->mp     = this->max_mp;
+  this->shield = this->max_shield;
 }
