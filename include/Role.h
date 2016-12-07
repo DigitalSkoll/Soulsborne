@@ -144,7 +144,7 @@ vector<item> items;
 void load_items(string file_name = ITEM)
 {
   ifstream item_in;
-  path_in.open(file_name.c_str());
+  item_in.open(file_name.c_str());
   string line;
   string field[FIELD_I];
   size_t pos;
