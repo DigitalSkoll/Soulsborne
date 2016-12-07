@@ -49,6 +49,15 @@ int main()
       case 'P':
         m.print_history();
         break;
+      case 'T':
+        m.reset();
+        break;
+      case 'R':
+        m.respawn();
+        break;
+      case 'L':
+        m.scan_doors();
+        break;
       case 'Q':
         std::cout << "Good Bye\n";
         break;

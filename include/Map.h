@@ -40,6 +40,9 @@ class Map
     void back();
     void move(const bearing);
     void print_history();
+    void reset();
+    void respawn();
+    void scan_doors();
     ~Map();
 };
 
@@ -114,7 +117,6 @@ void Map::move(const bearing d)
       }
       // set current to room at door d
       this->current = this->current->doors[d];
-      
       std::cout << "You went " << direction_ctos(d) << std::endl;
     }
   }
@@ -128,21 +130,87 @@ void Map::move(const bearing d)
 
 void Map::print_history()
 {
-  const std::vector<Move> v = this->movement_history.raw_vector();
-  std::vector<Move>::const_iterator iter;
-  for (iter = v.begin(); iter != v.end(); iter++)
+  if (this->movement_history.is_empty())
   {
-    switch ((* iter).direction())
+    std::cout << "There is no history.\n";
+  }
+  else
+  {
+    const std::vector<Move> v = this->movement_history.raw_vector();
+    std::vector<Move>::const_iterator iter;
+    for (iter = v.begin(); iter != v.end(); iter++)
+    {
+      switch ((* iter).direction())
+      {
+        case N:
+        case S:
+        case E:
+        case W:
+          std::cout << direction_ctos((* iter).direction()) << '\n';
+          break;
+        default:
+          std::cout << "Something went wrong in Map::print_history\n";
+          exit(1);
+      }
+    }
+  }
+}
+
+void Map::reset()
+{
+  Room * prev;
+  this->current = this->head->next;
+  while (this->current->next != NULL)
+  {
+    prev          = this->current;
+    this->current = this->current->next;
+    delete prev;
+  }
+  this->respawn();
+  for (size_t i = 0; i < 4; i++)
+  {
+    this->current->doors[i] = NULL;
+  }
+}
+
+void Map::respawn()
+{
+  while (!this->movement_history.is_empty())
+  {
+    this->movement_history.pop();
+  }
+  this->current = this->head;
+}
+
+void Map::scan_doors()
+{
+  for (size_t i = 0; i < 4; i++)
+  {
+    switch (i)
     {
       case N:
+        std::cout << "North ";
+        break;
       case S:
+        std::cout << "South ";
+        break;
       case E:
+        std::cout << "East ";
+        break;
       case W:
-        std::cout << direction_ctos((* iter).direction()) << '\n';
+        std::cout << "West ";
         break;
       default:
-        std::cout << "Something went wrong in Map::print_history\n";
-        exit(1);
+        std::cout << "Something went wring in Map::scam_doors.\n";
+    }
+    std::cout << "door: ";
+    if (this->current->doors[i] == NULL)
+    {
+      std::cout << "CLOSED\n";
+    }
+    else
+    {
+      std::cout << "OPEN\n";
     }
   }
 }
@@ -153,7 +221,7 @@ Map::~Map()
   this->current = this->head;
   while (this->current->next != NULL)
   {
-    prev = this->current->previous;
+    prev          = this->current;
     this->current = this->current->next;
     delete prev;
   }
