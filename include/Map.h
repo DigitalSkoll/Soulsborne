@@ -3,6 +3,7 @@
 #include <iterator>
 
 #include "Move.h"
+#include "Player.h"
 #include "Room.h"
 #include "Stack.h"
 
@@ -31,10 +32,11 @@ class Map
 {
   private:
     Stack<Move> movement_history;
+    Player * player;
     Room * head;
     Room * current;
   public:
-    Map();
+    Map(Player * p);
     Room * get_current() const;
     Room * get_head() const;
     void back();
@@ -46,9 +48,10 @@ class Map
     ~Map();
 };
 
-Map::Map()
+Map::Map(Player * p)
 {
-  this->head            = new Room();
+  this->player          = p;
+  this->head            = new Room(SPAWN);
   this->current         = this->head;
   this->head->previous  = this->head;
   this->head->next      = NULL;
@@ -73,19 +76,23 @@ void Map::back()
   else
   {
     bearing d = this->movement_history.top().reverse();
+
     switch(d)
     {
       case N:
       case S:
       case E:
       case W:
+        // intentional drop through
         this->current = this->current->doors[d];
         break;
       default:
         std::cout << "Something went wrong in Map::back\n";
         exit(1);
     }
+
     std::cout << "You went " << direction_ctos(d) << std::endl;
+
     movement_history.pop();
   }
 }
@@ -100,23 +107,26 @@ void Map::move(const bearing d)
     }
     else
     {
-      mv:
+      MV:
       this->movement_history.push(Move(d));
+
       if (this->current->doors[d] == NULL)
       {
         // create new room at door d
-        this->current->doors[d] = new Room();
+        this->current->doors[d]                         = new Room(NORMAL);
         // point new room prev to old last node
-        this->current->doors[d]->previous = this->head->previous;
+        this->current->doors[d]->previous               = this->head->previous;
         // link new room door reverse d to current
-        this->current->doors[d]->doors[this->movement_history.top().reverse()] = this->current;
+        this->current->doors[d]->
+          doors[this->movement_history.top().reverse()] = this->current;
         // point old last node next to new last node
-        this->head->previous->next    = this->current->doors[d];
+        this->head->previous->next                      = this->current->doors[d];
         // point  new room next to null
-        this->current->doors[d]->next = NULL;
+        this->current->doors[d]->next                   = NULL;
       }
       // set current to room at door d
       this->current = this->current->doors[d];
+
       std::cout << "You went " << direction_ctos(d) << std::endl;
     }
   }
@@ -124,7 +134,7 @@ void Map::move(const bearing d)
   {
     // I don't like using goto in this, but it's the easiest thing in this case
     // and it's not that bad here tbh
-    goto mv;
+    goto MV;
   }
 }
 
@@ -146,6 +156,7 @@ void Map::print_history()
         case S:
         case E:
         case W:
+          // intentional drop through
           std::cout << direction_ctos((* iter).direction()) << '\n';
           break;
         default:
@@ -160,13 +171,16 @@ void Map::reset()
 {
   Room * prev;
   this->current = this->head->next;
+
   while (this->current->next != NULL)
   {
     prev          = this->current;
     this->current = this->current->next;
     delete prev;
   }
+
   this->respawn();
+
   for (size_t i = 0; i < 4; i++)
   {
     this->current->doors[i] = NULL;
@@ -184,6 +198,23 @@ void Map::respawn()
 
 void Map::scan_doors()
 {
+  std::cout << "Room type: ";
+
+  switch (this->current->type)
+  {
+    case NORMAL:
+      std::cout << "Normal\n";
+      break;
+    case SPAWN:
+      std::cout << "Spawn\n";
+      break;
+    case BOSS:
+      std::cout << "Boss\n";
+      break;
+    default:
+      std::cout << "Something went terribly wrong in Map::scan_doors()\n";
+  }
+
   for (size_t i = 0; i < 4; i++)
   {
     switch (i)
@@ -203,7 +234,9 @@ void Map::scan_doors()
       default:
         std::cout << "Something went wring in Map::scam_doors.\n";
     }
+
     std::cout << "door: ";
+
     if (this->current->doors[i] == NULL)
     {
       std::cout << "CLOSED\n";
@@ -219,6 +252,7 @@ Map::~Map()
 {
   Room * prev;
   this->current = this->head;
+
   while (this->current->next != NULL)
   {
     prev          = this->current;

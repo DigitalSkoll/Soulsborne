@@ -3,32 +3,12 @@
 
 #include "Map.h"
 
-bearing ctob(const char d)
-{
-  bearing ret;
-  switch(d)
-  {
-    case 'N':
-      ret = N;
-      break;
-    case 'S':
-      ret = S;
-      break;
-    case 'E':
-      ret = E;
-      break;
-    case 'W':
-      ret = W;
-      break;
-    default:
-      ret = FAIL;
-  }
-  return ret;
-}
+bearing ctob(const char d);
 
 int main()
 {
-  Map m;
+  Player * p = new Player();
+  Map m(p);
   char response;
   while (response != 'Q')
   {
@@ -65,5 +45,29 @@ int main()
         std::cout << "I don't know how to do that.\n";
     }
   }
+  delete p;
   return 0;
+}
+
+bearing ctob(const char d)
+{
+  bearing ret;
+  switch(d)
+  {
+    case 'N':
+      ret = N;
+      break;
+    case 'S':
+      ret = S;
+      break;
+    case 'E':
+      ret = E;
+      break;
+    case 'W':
+      ret = W;
+      break;
+    default:
+      ret = FAIL;
+  }
+  return ret;
 }
