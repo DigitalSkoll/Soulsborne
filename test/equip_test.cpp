@@ -1,38 +1,23 @@
 #include <iostream>
-#include "../include/Player.h"
-#include "../include/Equipment.h"
+#include <fstream>
+#include <string>
+#include "../include/Role.h"
 
 using namespace std;
 
 int main()
 {
-  Player p_one;
-  p_one.set_name("Avem");
-  p_one.apply_race(2);
-  p_one.apply_path(1);
+  load_equips();
+  int id;
 
-  Equipment sword("sword", 20, 0, 0, 0, 5);
-  Equipment shield("shield", 0, 0, 20, 5, 5);
-  Equipment leather("leather", 0, 20, 0, 5);
+  cout << "Equipment ID > ";
+  cin >> id;
 
-  p_one.add_gear(sword);
-  p_one.add_gear(shield);
-  p_one.add_gear(leather);
-
-  p_one.print_all_gear();
-
-  int ans;
-  cout << "Remove Gear: ";
-  cin >> ans;
-
-  p_one.remove_gear(ans);
-  p_one.print_all_gear();
-
-  cout << "Remove Gear: ";
-  cin >> ans;
-
-  p_one.remove_gear(ans);
-  p_one.print_all_gear();
+  cout << equips[id].name << endl;
+  cout << "====================\n";
+  cout << "ATK : " << equips[id].attack << endl;
+  cout << "ARM : " << equips[id].armor << endl;
+  cout << "SHI : " << equips[id].shield << endl;
 
   return 0;
 }

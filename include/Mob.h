@@ -9,6 +9,7 @@
 #include <fstream>
 #include <stdlib.h>
 #include "Entity.h"
+#include "Role.h"
 
 using namespace std;
 
@@ -39,7 +40,7 @@ class Mob : public Entity
 
     bool apply_race(int race_id);
     bool apply_path(int path_id);
-    void print();
+    void print_title();
 
     void morph_mob();
 };
@@ -68,118 +69,53 @@ string Mob::getPath() { return this->mob_path; }
 
 bool Mob::apply_race(int race_id)
 {
-
-  ifstream race_file;
-  race_file.open("../data/race.csv");
-  string value;
-  bool id_found = false;
-//  int i = 0; // unused according to g++
-  string race;
-
-  while(getline(race_file, value,','))
+  if (races.empty())
   {
-    if (value == to_string(race_id))
-    {
-      id_found = true;
-      // get race
-      getline(race_file, race,',');
-      this->mob_race = race,
-      // get speed
-      getline(race_file, value, ',');
-      this->speed = atoi(value.c_str());
-      // get hp
-      getline(race_file, value, ',');
-      this->hp = atoi(value.c_str());
-      // get mp
-      getline(race_file, value, ',');
-      this->mp = atoi(value.c_str());
-      // get wallet 
-      getline(race_file, value, ',');
-      this->wallet = atoi(value.c_str());
-      // get armor 
-      getline(race_file, value, ',');
-      this->armor = atoi(value.c_str());
-      // get shield 
-      getline(race_file, value, ',');
-      this->shield = atoi(value.c_str());
-      // get shield armor 
-      getline(race_file, value, ',');
-      this->shield_armor = atoi(value.c_str());
-      // get base attack 
-      getline(race_file, value, ',');
-      this->base_attack = atoi(value.c_str());
-    }
-    else
-      getline(race_file, value);
+    cerr << "No Race\n";
+    return false;
   }
+  this->mob_race       = races[race_id].name;
+  this->hp             = races[race_id].hp;
+  this->mp             = races[race_id].mp;
+  this->armor          = races[race_id].armor;
+  this->shield         = races[race_id].shield;
+  this->shield_armor   = races[race_id].shield_armor;
+  this->wallet         = races[race_id].wallet;
+  this->base_attack    = races[race_id].attack;
+  this->speed          = races[race_id].speed;
 
-  race_file.close();
-
-  return id_found;
-
+  return true;
 }
 
 bool Mob::apply_path(int path_id)
 {
-
-  ifstream path_file;
-  path_file.open("../data/path.csv");
-  string value;
-//  int i = 0; // unused according to g++
-  string path;
-  bool id_found = false;
-
-  while(getline(path_file, value,','))
+  if (paths.empty())
   {
-    if (value == to_string(path_id))
-    {
-      id_found = true;
-      // get path
-      getline(path_file, path,',');
-      this->mob_path = path;
-      // get speed 
-      getline(path_file, value, ',');
-      this->speed += atoi(value.c_str());
-      // get hp
-      getline(path_file, value, ',');
-      this->hp += atoi(value.c_str());
-      // get mp
-      getline(path_file, value, ',');
-      this->mp += atoi(value.c_str());
-      // get wallet 
-      getline(path_file, value, ',');
-      this->wallet += atoi(value.c_str());
-      // get armor 
-      getline(path_file, value, ',');
-      this->armor += atoi(value.c_str());
-      // get shield 
-      getline(path_file, value, ',');
-      this->shield += atoi(value.c_str());
-      // get shield armor 
-      getline(path_file, value, ',');
-      this->shield_armor += atoi(value.c_str());
-      // get base attack 
-      getline(path_file, value, ',');
-      this->base_attack += atoi(value.c_str());
-    }
-    else
-      getline(path_file, value);
+    cerr << "No Path\n";
+    return false;
   }
+  this->mob_path       = paths[path_id].name;
+  this->hp            += paths[path_id].hp;
+  this->mp            += paths[path_id].mp;
+  this->armor         += paths[path_id].armor;
+  this->shield        += paths[path_id].shield;
+  this->shield_armor  += paths[path_id].shield_armor;
+  this->wallet        += paths[path_id].wallet;
+  this->base_attack   += paths[path_id].attack;
+  this->speed         += paths[path_id].speed;
 
-  path_file.close();
-
-  return id_found;
+  return true;
 }
 
-void Mob::print()
+void Mob::print_title()
 {
   cout << this->mob_race << " " << this->mob_path << endl;
 }
 
 void Mob::morph_mob()
 {
-  int rand_race = (rand() % 5) + 1;
-  int rand_path = (rand() % 2) + 1;
+  int rand_race = (rand() % races.size()) + 1;
+  int rand_path = (rand() % paths.size()) + 1;
 
   this->apply_race(rand_race);
   this->apply_path(rand_path);
