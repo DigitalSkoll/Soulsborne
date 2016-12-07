@@ -196,7 +196,7 @@ void Map::respawn()
 
   this->current = this->head;
 
-  player.refresh();
+  player->refresh();
 }
 
 void Map::scan_doors()

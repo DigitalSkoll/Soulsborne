@@ -1,9 +1,10 @@
 #pragma once
+#include <cstdlib>
+#include <ctime>
 #include <iostream>
 #include <string>
-#include <cstdlib>
-#include "Mob.h"
 #include "Item.h"
+#include "Mob.h"
 
 #define MAX_MOBS 3
 #define MAX_ITEMS 3
@@ -89,6 +90,7 @@ void Room::spawn_boss()
 
 void Room::spawn_mobs()
 {
+  srand(time(NULL));
   Mob tmp;
   this->mob_size = (rand() % MAX_MOBS ) + 1;
   for (int i = 0; i < this->mob_size; i++)

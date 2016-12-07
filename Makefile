@@ -9,3 +9,6 @@ soulsborne: $(DEPS)
 
 run: $(OUT)
 	$(OUT)
+
+debug: $(OUT)
+	gdb $(OUT)

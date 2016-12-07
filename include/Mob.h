@@ -6,8 +6,9 @@
 //
 //================================
 #pragma once
+#include <cstdlib>
+#include <ctime>
 #include <fstream>
-#include <stdlib.h>
 #include "Entity.h"
 #include "Role.h"
 
@@ -22,18 +23,17 @@ class Mob : public Entity
   public:
 
     // Constructor
-    Mob(string race="Human", string path="Warrior", string name="[ ]", 
+    Mob(string race="Human", string path="Warrior", string name="[ ]",
         int sp=0, int hp=0, int mp=0, int armor=0, int shield=0, int shield_armor=0,
         int base_attack = 0, int wallet=0 );
 
     // setters
-    void setStats(string race="Human", 
+    void setStats(string race="Human",
         int sp=0, int hp=0, int mp=0, int armor=0, int shield=0, int shield_armor=0,
         int base_attack = 0, int wallet=0 );
     void setRace(string race);
     void setPath(string path);
 
-    
     // getters
     string getRace();
     string getPath();
@@ -45,7 +45,7 @@ class Mob : public Entity
     void morph_mob();
 };
 
-Mob::Mob(string race, string path, string name, 
+Mob::Mob(string race, string path, string name,
         int sp, int hp, int mp, int armor, int shield, int shield_armor,
         int base_attack, int wallet) : Entity(name, sp, hp, mp, armor, shield, shield_armor, base_attack, wallet)
 {
@@ -114,8 +114,13 @@ void Mob::print_title()
 
 void Mob::morph_mob()
 {
-  int rand_race = (rand() % races.size()) + 1;
-  int rand_path = (rand() % paths.size()) + 1;
+  srand(time(NULL));
+  // something is causing races.size() and probably paths.size() to be zero
+  // this causes and arithmetic exception as % here attempts to divide by zero
+//  int rand_race = (rand() % races.size()) + 1;
+//  int rand_path = (rand() % paths.size()) + 1;
+  int rand_race = 1;
+  int rand_path = 1;
 
   this->apply_race(rand_race);
   this->apply_path(rand_path);
