@@ -1,3 +1,4 @@
+#include <ctime>
 #include <iostream>
 #include <string>
 
@@ -7,6 +8,13 @@ bearing ctob(const char d);
 
 int main()
 {
+  srand(time(NULL));
+
+  load_races();
+  load_paths();
+  load_items();
+  load_equips();
+
   Player * p = new Player();
   Map m(p);
   char response;

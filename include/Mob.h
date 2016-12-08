@@ -7,7 +7,6 @@
 //================================
 #pragma once
 #include <cstdlib>
-#include <ctime>
 #include <fstream>
 #include "Entity.h"
 #include "Role.h"
@@ -114,13 +113,8 @@ void Mob::print_title()
 
 void Mob::morph_mob()
 {
-  srand(time(NULL));
-  // something is causing races.size() and probably paths.size() to be zero
-  // this causes and arithmetic exception as % here attempts to divide by zero
-//  int rand_race = (rand() % races.size()) + 1;
-//  int rand_path = (rand() % paths.size()) + 1;
-  int rand_race = 1;
-  int rand_path = 1;
+  int rand_race = (rand() % races.size()) + 1;
+  int rand_path = (rand() % paths.size()) + 1;
 
   this->apply_race(rand_race);
   this->apply_path(rand_path);
