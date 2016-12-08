@@ -49,12 +49,22 @@ int main()
     {
       m.get_current()->display_mobs();
     }
+    else if ("inventory" == response)
+    {
+      p->inven_mgmt();
+    }
+    else if ("gear" == response)
+    {
+      p->gear_mgmt();
+    }
     else if ("help" == response)
     {
       std::cout << "[north | south | east | west] - go [north | south | east | west]\n"
                 << "back - go back (removes last move from history)\n"
                 << "history - show your movement history\n"
                 << "mobs - show mobs\n"
+                << "inve - start inventory mgmt\n"
+                << "gear - start gear mgmt\n"
                 << "quit - quit the game\n"
                 << "help - print this message\n";
     }

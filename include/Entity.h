@@ -75,7 +75,7 @@ class Entity
     Item get_item(unsigned int index);
     bool remove_item(unsigned int index);                  // Remove Item at index
     bool use_item(unsigned int index);                    // Apply item bonus to entity
-    void print_inven(int i);                      // print iventory item at index i
+    void print_inven(unsigned int i);                      // print iventory item at index i
     void print_inven(vector<Item>::iterator& it); // print iventory item using iterator
     void print_all_inven();                       // print every item in inventory
     int num_inven();                              // print number of items in inventory
@@ -280,12 +280,12 @@ bool Entity::remove_item(unsigned int index)
 // print item from inventory at index i
 // use the print() function from Item object 
 // to print out the item information
-void Entity::print_inven(int i)
+void Entity::print_inven(unsigned int i)
 {
-  if ((i-1) > list.size() || (i-1) < 0)
+  if (i > list.size())
     cout << "Invaid Index\n";
   else
-  cout << i << ": " << list[i-1].get_name();
+    cout << i << ": " << list[i].get_name();
 }
 
 // print_inven(vector<Item>::iterator& it)
