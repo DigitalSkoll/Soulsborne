@@ -124,6 +124,8 @@ void Player::refresh()
   this->hp     = this->max_hp;
   this->mp     = this->max_mp;
   this->shield = this->max_shield;
+  if (this->dead)
+    this->dead = false;
 }
 
 void Player::loot_items(Mob &m)
