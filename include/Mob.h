@@ -113,8 +113,18 @@ void Mob::print_title()
 
 void Mob::morph_mob()
 {
-  int rand_race = (rand() % races.size()) + 1;
-  int rand_path = (rand() % paths.size()) + 1;
+  int rand_race;
+  int rand_path;
+  if (races.size() != 0 && paths.size() != 0)
+  {
+   rand_race = (rand() % races.size()+1);
+   rand_path = (rand() % paths.size()+1);
+  }
+  else 
+  {
+    rand_race = 1;
+    rand_path = 1;
+  }
 
   this->apply_race(rand_race);
   this->apply_path(rand_path);

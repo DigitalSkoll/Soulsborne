@@ -9,10 +9,10 @@
 #define FIELD_I   5
 #define FIELD_E   7
 
-#define RACE  "../data/Races.csv"
-#define PATH  "../data/Paths.csv"
-#define ITEM  "../data/Items.csv"
-#define EQUIP "../data/Equipment.csv"
+#define RACE  "data/Races.csv"
+#define PATH  "data/Paths.csv"
+#define ITEM  "data/Items.csv"
+#define EQUIP "data/Equipment.csv"
 
 using namespace std;
 
