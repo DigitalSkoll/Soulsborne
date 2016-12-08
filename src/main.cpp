@@ -19,6 +19,9 @@ int main()
   Player * p = new Player();
   Map m(p);
   std::string response;
+
+  std::cout << "Type \"help\" for commands\n";
+
   while (true)
   {
     getline(std::cin, response);
@@ -45,6 +48,15 @@ int main()
     else if ("mobs" == response)
     {
       m.get_current()->display_mobs();
+    }
+    else if ("help" == response)
+    {
+      std::cout << "[north | south | east | west] - go [north | south | east | west]\n"
+                << "back - go back (removes last move from history)\n"
+                << "history - show your movement history\n"
+                << "mobs - show mobs\n"
+                << "quit - quit the game\n"
+                << "help - print this message\n";
     }
     else if ("quit" == response)
     {
