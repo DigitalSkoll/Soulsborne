@@ -140,7 +140,11 @@ void Map::move(const bearing d)
 
   if (this->current->mob_alive_count() > 0)
   {
-    this->current->start_combat();
+    bool player_death = this->current->start_combat(this->player);
+    if (player_death)
+    {
+      this->respawn();
+    }
   }
 }
 

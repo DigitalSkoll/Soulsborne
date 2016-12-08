@@ -24,6 +24,8 @@ int main()
 
   while (true)
   {
+    std::cout << " ~> ";
+
     getline(std::cin, response);
 
     if ("north" == response ||
@@ -41,7 +43,7 @@ int main()
     {
       m.print_history();
     }
-    else if ("scan" == response)
+    else if ("doors" == response)
     {
       m.scan_doors();
     }
@@ -49,7 +51,7 @@ int main()
     {
       m.get_current()->display_mobs();
     }
-    else if ("inventory" == response)
+    else if ("inve" == response)
     {
       p->inven_mgmt();
     }
@@ -62,6 +64,7 @@ int main()
       std::cout << "[north | south | east | west] - go [north | south | east | west]\n"
                 << "back - go back (removes last move from history)\n"
                 << "history - show your movement history\n"
+                << "doors - show the doors\n"
                 << "mobs - show mobs\n"
                 << "inve - start inventory mgmt\n"
                 << "gear - start gear mgmt\n"
