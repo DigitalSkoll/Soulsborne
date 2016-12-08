@@ -128,4 +128,5 @@ void Mob::morph_mob()
 
   this->apply_race(rand_race);
   this->apply_path(rand_path);
+  this->name = this->mob_race + " " +  this->mob_path;
 }
