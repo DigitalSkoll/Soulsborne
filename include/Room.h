@@ -89,12 +89,19 @@ unsigned int Room::mob_alive_count()
 {
   unsigned int count = 0;
 
-  for (unsigned int i = 0; i < this->mob_size; i++)
+  if (!this->mobs.empty())
   {
-    if (!this->mobs.at(i).is_dead())
+    for (unsigned int i = 0; i < this->mob_size; i++)
     {
-      count++;
+      if (!this->mobs.at(i).is_dead())
+      {
+        count++;
+      }
     }
+  }
+  else
+  {
+    return 0;
   }
 
   return count;
