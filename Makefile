@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-g -Wall -Wextra -Wpedantic -Werror
+CFLAGS=-g -Wall -Wextra -Wpedantic -Werror -std=c++11
 INCLUDE=-Iinclude
 DEPS=src/main.cpp
 OUT=bin/soulsborne
