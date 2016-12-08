@@ -229,7 +229,7 @@ void Entity::print()
 // apply the bonus of the item at index in list 
 bool Entity::use_item(unsigned int index)
 {
-  if (index > this->list.size() || index <= 0)
+  if (index-1 > this->list.size() || index - 1 <= 0)
   {
     cout << "Invlaid index\n";
     return false;
@@ -282,7 +282,10 @@ bool Entity::remove_item(unsigned int index)
 // to print out the item information
 void Entity::print_inven(int i)
 {
-  cout << i << ": " << list[i].get_name();
+  if ((i-1) > list.size() || (i-1) < 0)
+    cout << "Invaid Index\n";
+  else
+  cout << i << ": " << list[i-1].get_name();
 }
 
 // print_inven(vector<Item>::iterator& it)
@@ -305,7 +308,7 @@ void Entity::print_all_inven()
 }
 void Entity::print_gear(unsigned int index)
 {
-  this->gear[index].print();
+  this->gear[index-1].print();
 }
 // print gear
 void Entity::print_gear(vector<Equipment>::iterator& eq)
