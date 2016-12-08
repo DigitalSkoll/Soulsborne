@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <functional>
 #include <iostream>
 #include <iterator>
 #include <deque>
@@ -8,8 +9,10 @@ class Queue
 {
   private:
     std::deque<T> elems;
+    std::function<int(T, T)> sort_method;
 
   public:
+    Queue(std::function<int(T, T)> f) : sort_method(f) {};
     bool in(T item) const;
     bool is_empty() const;
     T front() const;
@@ -37,7 +40,7 @@ T Queue<T>::front() const
 {
   if (elems.empty())
   {
-    std::cout << "cannot 'Queue<>::top()': empty stack\n";
+    std::cout << "cannot 'Queue<>::front()': empty queue\n";
     exit(1);
   }
 
@@ -61,7 +64,7 @@ void Queue<T>::pop()
 {
   if (elems.empty())
   {
-    std::cout << "cannot 'Queue<>::pop()': empty stack\n";
+    std::cout << "cannot 'Queue<>::pop()': empty queue\n";
     exit(1);
   }
 
@@ -79,4 +82,5 @@ template <class T>
 void Queue<T>::push(T const & elem)
 {
   elems.push_back(elem);
+  sort(elems.begin(), elems.end(), sort_method);
 }

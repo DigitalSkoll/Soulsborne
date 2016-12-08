@@ -16,7 +16,13 @@ int main()
   load_items();
   load_equips();
 
-  Player * p = new Player();
+  std::string name;
+  std::cout << "Enter a name: ";
+  getline(std::cin, name);
+  std::cout << '\n';
+  Player * p = new Player(
+      name, "Human", "Warrior",
+      2, 50, 20, 1, 0, 0, 10, 0);
   Map m(p);
   std::string response;
 
@@ -51,6 +57,10 @@ int main()
     {
       m.get_current()->display_mobs();
     }
+    else if ("stats" == response)
+    {
+      p->print();
+    }
     else if ("inve" == response)
     {
       p->inven_mgmt();
@@ -66,6 +76,7 @@ int main()
                 << "history - show your movement history\n"
                 << "doors - show the doors\n"
                 << "mobs - show mobs\n"
+                << "stats - show your stats\n"
                 << "inve - start inventory mgmt\n"
                 << "gear - start gear mgmt\n"
                 << "quit - quit the game\n"

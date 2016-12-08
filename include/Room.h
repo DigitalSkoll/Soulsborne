@@ -34,8 +34,6 @@ class Room
     Room * previous;
     Room * next;
     room_type type;
-    Queue<Entity *> combat_q;
-
 
   public:
 //    Room(Player soul);
@@ -88,32 +86,161 @@ bool Room::start_combat(Player * p)
 {
   // insert everything into the queue so that things faster than player
   // are in front and everything else is behind
-  unsigned int order_size = this->mob_size + 1;
-  std::vector<Entity *> order;
-  unsigned int i = 0;
-  std::vector<Mob>::iterator it;
-  for (it = this->mobs.begin(); it != this->mobs.end(); it++, i++)
+  Queue<Entity *> combat_q([](Entity * a, Entity * b){ return b->get_speed() < a->get_speed(); });
+  std::function<void()> load_queue = [& combat_q, this, & p]()
   {
-    order.push_back(& (* it));
-  }
+    //unsigned int queue_size = this->mob_size + 1;
+    unsigned int i = 0;
+    std::vector<Mob>::iterator it;
+    for (it = this->mobs.begin(); it != this->mobs.end(); it++, i++)
+    {
+      if (!it->is_dead())
+      {
+        combat_q.push(& (* it));
+      }
+    }
 
-  order.push_back(p);
-
-  std::sort(order.begin(),
-            order.end(),
-            [](Entity * a, Entity * b){ return b->get_speed() < a->get_speed(); });
-
-  for (i = 0; i < order_size; i++)
-  {
-    std::cout << order[i]->get_speed() << " - "
-              << order[i]->get_name() << std::endl;
-  }
+    combat_q.push(p);
 /*
-  while (!p->is_dead() || this->mobs_alive_count() != 0)
+    for (i = 0; i < queue_size; i++)
+    {
+      std::cout << combat_q.front()->get_speed() << " - "
+                << combat_q.front()->get_name() << std::endl;
+      combat_q.pop();
+    }
+    */
+  };
+
+  std::string response;
+  bool defending;
+  while (!p->is_dead() && this->mob_alive_count() != 0)
   {
-    
+    defending = false;
+    load_queue();
+    while (!combat_q.is_empty())
+    {
+      if (combat_q.front() == p)
+      {
+        int i;
+        while (true)
+        {
+          std::cout << "combat ~> ";
+          getline(std::cin, response);
+          if (response == "attack")
+          {
+            std::cout << "combat ~> mob id ] ";
+            std::cin >> i;
+            std::cin.clear();
+            std::cin.ignore();
+            int dmg = p->attack();
+            this->mobs.at(i).take_damage_hp(dmg);
+            std::cout << "You did " << dmg << " damage to " << this->mobs.at(i).get_name() << "\n";
+            break;
+          }
+          else if (response == "defend")
+          {
+            defending = true;
+            break;
+          }
+          if (response == "use")
+          {
+            std::cout << "combat/inventory ~> ";
+            getline(std::cin, response);
+            while (true)
+            {
+              if (response == "print")
+              {
+                p->print_all_inven();
+              }
+              else if (response == "detail")
+              {
+                std::cout << "combat/inventory ~> item id ] ";
+                std::cin >> i;
+                std::cin.clear();
+                std::cin.ignore();
+                p->print_inven(i);
+              }
+              else if (response == "stats")
+              {
+                p->print();
+              }
+              else if (response == "item")
+              {
+                std::cout << "combat/inventory ~> item id ] ";
+                std::cin >> i;
+                std::cin.clear();
+                std::cin.ignore();
+                p->use_item(i);
+                break;
+              }
+              else if (response == "help")
+              {
+                std::cout << "print - print list of items in inventory\n"
+                          << "detail - see detailed information about item\n"
+                          << "stats - print your stats\n"
+                          << "item - specify item to use\n"
+                          << "cancel - cancel use item\n"
+                          << "help - print this message\n";
+              }
+              else if (response == "cancel")
+              {
+                std::cout << "use item canceled\n";
+                break;
+              }
+              else
+              {
+                std::cout << "I don't know how to \"" << response << "\"\n";
+              }
+            }
+            break;
+          }
+          else if (response == "mobs")
+          {
+            this->display_mobs();
+          }
+          else if (response == "stats")
+          {
+            p->print();
+          }
+          else if (response == "end")
+          {
+            std::cout << "Turn ended without action\n";
+            break;
+          }
+          else if (response == "help")
+          {
+            std::cout << "attack - attack an enemy\n"
+                      << "defend - defend from enemy attack\n"
+                      << "use - use an item\n"
+                      << "mobs - show mobs\n"
+                      << "stats - print your stats\n"
+                      << "end - end your turn\n"
+                      << "help - print this message\n";
+          }
+          else
+          {
+            std::cout << "I don't know how to \"" << response << "\"\n";
+          }
+        }
+      }
+      else
+      {
+        int dmg = combat_q.front()->attack();
+        if (defending)
+        {
+          p->take_damage_shield(dmg);
+          defending = false;
+        }
+        else
+        {
+          p->take_damage_hp(dmg);
+        }
+        std::cout << combat_q.front()->get_name() << " directed " << dmg << " damage toward you\n";
+      }
+      combat_q.pop();
+    }
   }
-*/
+
   return p->is_dead();
 }
 
