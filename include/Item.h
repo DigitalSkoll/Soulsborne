@@ -7,6 +7,7 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include "Role.h"
 
 using namespace std;
 
@@ -34,6 +35,7 @@ class Item
     void set_shield_gain(int a);
 
     void print();   // Print out basic info of Item
+    void gen_item();
 };
 
 // Constructors
@@ -67,4 +69,14 @@ void Item::print()
   cout << "| MP   : +" << this->mp_gain << endl;
   cout << "| Shield+: " << this->shield_gain << endl;
   cout << "+=================+\n";
+}
+
+void Item::gen_item()
+{
+  int id = (rand() % items.size()) + 1;
+
+  this->name = items[id].name;
+  this->hp_gain = items[id].hp;
+  this->mp_gain = items[id].mp;
+  this->shield_gain = items[id].shield;
 }

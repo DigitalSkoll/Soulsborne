@@ -422,9 +422,9 @@ int Entity::num_gear()
 
 void Entity::print_equip()
 {
-  cout << this->right_hand.get_name() << endl;
-  cout << this->left_hand.get_name() << endl;
-  cout << this->body.get_name() << endl;
+  cout << "Right Hand :" << this->right_hand.get_name() << endl;
+  cout << "Left Hand  :" << this->left_hand.get_name() << endl;
+  cout << "Body       :" << this->body.get_name() << endl;
 }
 
 void Entity::add_gear(Equipment eq)

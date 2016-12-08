@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "Role.h"
 
 using namespace std;
 
@@ -32,6 +33,7 @@ class Equipment
     void print();
     void print_name();
     void operator=(const Equipment &other);
+    void gen_gear();
 };
 
 Equipment::Equipment(string n, int att, int arm, int shi, int sab, int dur)
@@ -80,4 +82,15 @@ void Equipment::print()
 void Equipment::print_name()
 {
   cout << this->name << endl;
+}
+
+void Equipment::gen_gear()
+{
+  int id = (rand() % equips.size()) + 1;
+
+  this->name = equips[id].name;
+  this->attack_bonus = equips[id].attack;
+  this->shield_bonus = equips[id].shield;
+  this->shield_armor_bonus = equips[id].shield_armor;
+  this->dur = equips[id].dur;
 }

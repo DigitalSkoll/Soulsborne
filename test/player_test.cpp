@@ -1,12 +1,17 @@
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 #include "../include/Player.h"
 
 using namespace std;
 
 int main()
 {
+  srand(time(NULL));
   load_races();
   load_paths();
+  load_items();
+  load_equips();
   Player p_one("Avem");
 
 
@@ -17,6 +22,16 @@ int main()
   cout << p_one.getRace() << endl;
   cout << p_one.getPath() << endl;
 
-  p_one.inven_mgmt();
+  Equipment e;
+  e.gen_gear();
+
+  p_one.add_gear(e);
+
+  e.gen_gear();
+
+  p_one.add_gear(e);
+
+
+  p_one.gear_mgmt();
 
 }

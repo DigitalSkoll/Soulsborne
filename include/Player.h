@@ -45,6 +45,7 @@ class Player : public Entity
     void loot_items(Mob &m);
     void loot_gear(Mob &m);
     void inven_mgmt();
+    void gear_mgmt();
 
     void refresh();
 
@@ -169,18 +170,24 @@ void Player::inven_mgmt()
     {
       cout << "inventory ~> item id ] ";
       cin >> i;
+      cin.clear();
+      cin.ignore();
       this->use_item(i);
     }
     else if ("detail" == resp)
     {
       cout << "inventory ~> item id ] ";
       cin >> i;
+      cin.clear();
+      cin.ignore();
       this->print_inven(i);
     }
     else if ("drop" == resp)
     {
       cout << "inventory ~> item id ] ";
       cin >> i;
+      cin.clear();
+      cin.ignore();
       this->remove_item(i);
     }
     else if ("num" == resp)
@@ -194,9 +201,87 @@ void Player::inven_mgmt()
            << "detail - see detailed information about item\n"
            << "drop   - drop an item\n"
            << "num    - total number of items in inventory\n"
+           << "quit   - exit mgmt\n"
            << "help   - print this message\n";
     }
+    else if ("quit" == resp)
+      break;
     else
-      cout << "Invalid Command\n";
+      cout << "Invalid command\n";
+  }
+}
+
+void Player::gear_mgmt()
+{
+  string resp;
+  int i;
+  char loc;
+  while (true)
+  {
+    cout << "gear ~> ";
+    getline(cin, resp);
+
+    if ("print" == resp)
+      this->print_all_gear();
+    else if ("put_on" == resp)
+    {
+      cout << "gear ~> gear id ] ";
+      cin >> i;
+      cin.clear();
+      cin.ignore();
+      cout << "gear ~> gear id ] wear } ";
+      cin >> loc;
+      cin.clear();
+      cin.ignore();
+      put_on(loc, gear[i]);
+    }
+    else if ("take_off" == resp)
+    {
+      cout << "gear ~> wear ] ";
+      cin >> loc;
+      cin.clear();
+      cin.ignore();
+      take_off(loc);
+    }
+    else if ("equip" == resp)
+    {
+      this->print_equip();
+    }
+    else if ("detail" == resp)
+    {
+      cout << "gear ~> gear id ] ";
+      cin >> i;
+      cin.clear();
+      cin.ignore();
+      this->print_gear(i); 
+    }
+    else if ("drop" == resp)
+    {
+      cout << "gear ~> gear id ] ";
+      cin >> i;
+      cin.clear();
+      cin.ignore();
+      this->remove_gear(i);
+    }
+    else if ("num" == resp)
+    {
+      cout << this->num_gear() << " in Inventory\n";
+    }
+    else if ("help" == resp)
+    {
+      cout << "print    - print list of gear in inventory\n"
+           << "put_on   - put gear on\n"
+           << "take_off - take gear off\n"
+           << "equip    - print equiped gear\n"
+           << "detail   - see detailed information about gear\n"
+           << "drop     - drop gear\n"
+           << "num      - total number of gear in inventory\n"
+           << "quit     - exit mgmt\n"
+           << "help     - print this message\n";
+    }
+    else if ("quit" == resp)
+      break;
+    else
+      cout << "Invalid command\n";
   }
 }
