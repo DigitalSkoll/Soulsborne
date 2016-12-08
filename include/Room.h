@@ -130,11 +130,18 @@ void Room::start_combat()
 
 void Room::display_mobs()
 {
-  for (unsigned int i = 0; i < this->mob_size; i++)
+  if (!this->mobs.empty())
   {
-    cout << i << ") ",
-    mobs.at(i).print();
-    cout << endl;
+    for (unsigned int i = 0; i < this->mob_size; i++)
+    {
+      cout << i << ") ",
+      mobs.at(i).print();
+      cout << endl;
+    }
+  }
+  else
+  {
+    cout << "No mobs\n";
   }
 }
 
