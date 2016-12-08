@@ -147,7 +147,7 @@ void Player::loot_gear(Mob &m)
 {
   if (m.is_dead())
   {
-    for(int i = 0; i < m.num_inven(); i++)
+    for(int i = 0; i < m.num_gear(); i++)
    {
      this->add_gear(m.get_gear(i));
      cout << "Got: " << m.get_gear_name(i) << endl;
@@ -235,7 +235,7 @@ void Player::gear_mgmt()
       cin >> loc;
       cin.clear();
       cin.ignore();
-      put_on(loc, gear[i]);
+      put_on(loc, gear[i-1]);
     }
     else if ("take_off" == resp)
     {

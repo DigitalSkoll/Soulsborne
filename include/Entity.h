@@ -258,7 +258,7 @@ void Entity::add_item(Item i)
 
 Item Entity::get_item(unsigned int index)
 {
-  if (index > list.size() || index <=0)
+  if (index > list.size())
   {
     cout << "Invalid Index\n";
   }
@@ -267,7 +267,7 @@ Item Entity::get_item(unsigned int index)
 
 bool Entity::remove_item(unsigned int index)
 {
-  if (index > list.size() || index <=0)
+  if (index > list.size())
   {
     cout << "Invalid Index\n";
     return false;
@@ -437,7 +437,7 @@ void Entity::add_gear(Equipment eq)
 
 Equipment Entity::get_gear(unsigned int index)
 {
-  if (index > list.size() || index <=0)
+  if (index > list.size())
   {
     cout << "Invalid Index\n";
   }
@@ -446,7 +446,7 @@ Equipment Entity::get_gear(unsigned int index)
 
 bool Entity::remove_gear(unsigned int index)
 {
-  if (index > gear.size() || index <=0)
+  if (index > gear.size())
   {
     cout << "Invalid Index\n";
     return false;

@@ -115,6 +115,8 @@ void Mob::morph_mob()
 {
   int rand_race;
   int rand_path;
+  Item i;
+  Equipment g;
   if (races.size() != 0 && paths.size() != 0)
   {
    rand_race = (rand() % races.size());
@@ -125,6 +127,19 @@ void Mob::morph_mob()
     rand_race = 1;
     rand_path = 1;
   }
+  int rand_item = (rand() % 3) + 1;
+  int rand_gear = (rand() % 3) + 1;
+  for (int j = 0; j < rand_item; j++)
+  {
+    i.gen_item();
+    this->add_item(i);
+  }
+  for (int j = 0; j < rand_gear; j++)
+  {
+      g.gen_gear();
+      this->add_gear(g);
+  }
+
 
   this->apply_race(rand_race);
   this->apply_path(rand_path);

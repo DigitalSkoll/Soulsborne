@@ -122,7 +122,7 @@ bool Room::start_combat(Player * p)
     {
       if (combat_q.front() == p)
       {
-        int i;
+        unsigned int i;
         while (true)
         {
           std::cout << "combat ~> ";
@@ -131,12 +131,21 @@ bool Room::start_combat(Player * p)
           {
             std::cout << "combat ~> mob id ] ";
             std::cin >> i;
-            std::cin.clear();
-            std::cin.ignore();
-            int dmg = p->attack();
-            this->mobs.at(i).take_damage_hp(dmg);
-            std::cout << "You did " << dmg << " damage to " << this->mobs.at(i).get_name() << "\n";
-            break;
+            if (i >= this->mobs.size())
+            {
+              std::cout << "Invaild Index\n";
+              std::cin.clear();
+              std::cin.ignore();
+            }
+            else
+            {
+              std::cin.clear();
+              std::cin.ignore();
+              int dmg = p->attack();
+              this->mobs.at(i).take_damage_hp(dmg);
+              std::cout << "You did " << dmg << " damage to " << this->mobs.at(i).get_name() << "\n";
+              break;
+            }
           }
           else if (response == "defend")
           {
