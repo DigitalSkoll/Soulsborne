@@ -46,6 +46,7 @@ class Room
     void spawn_boss();
     void spawn_mobs();
 //  void spawn_loot();
+    void loot_room(Player * p);
 
     void display_mobs();
 
@@ -284,6 +285,31 @@ void Room::spawn_mobs()
   {
     tmp.morph_mob();
     mobs.push_back(tmp);
+  }
+}
+
+void Room::loot_room(Player * p)
+{
+  if (this->mobs.empty())
+  {
+    std::cout << "Cannot loot empty room\n";
+  }
+  else
+  {
+    unsigned int i;
+    std::cout << "loot ~> mob id ] ";
+    std::cin >> i;
+    std::cin.clear();
+    std::cin.ignore();
+    if (i > this->mob_size)
+    {
+      std::cout << "That mob does not exist\n";
+    }
+    else
+    {
+      p->loot_items(this->mobs.at(i));
+      p->loot_gear(this->mobs.at(i));
+    }
   }
 }
 

@@ -128,7 +128,7 @@ void Player::refresh()
 
 void Player::loot_items(Mob &m)
 {
-  if (!m.is_dead())
+  if (m.is_dead())
   {
     for(int i = 0; i < m.num_inven(); i++)
    {
@@ -143,7 +143,7 @@ void Player::loot_items(Mob &m)
 
 void Player::loot_gear(Mob &m)
 {
-  if (!m.is_dead())
+  if (m.is_dead())
   {
     for(int i = 0; i < m.num_inven(); i++)
    {

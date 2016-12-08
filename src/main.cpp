@@ -69,6 +69,10 @@ int main()
     {
       p->gear_mgmt();
     }
+    else if ("loot" == response)
+    {
+      m.get_current()->loot_room(p);
+    }
     else if ("help" == response)
     {
       std::cout << "[north | south | east | west] - go [north | south | east | west]\n"
@@ -79,6 +83,7 @@ int main()
                 << "stats - show your stats\n"
                 << "inve - start inventory mgmt\n"
                 << "gear - start gear mgmt\n"
+                << "loot - loot available containers\n"
                 << "quit - quit the game\n"
                 << "help - print this message\n";
     }
