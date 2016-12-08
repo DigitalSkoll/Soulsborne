@@ -86,7 +86,7 @@ void Equipment::print_name()
 
 void Equipment::gen_gear()
 {
-  int id = (rand() % equips.size()) + 1;
+  int id = (rand() % equips.size());
 
   this->name = equips[id].name;
   this->attack_bonus = equips[id].attack;

@@ -117,8 +117,8 @@ void Mob::morph_mob()
   int rand_path;
   if (races.size() != 0 && paths.size() != 0)
   {
-   rand_race = (rand() % races.size())+1;
-   rand_path = (rand() % paths.size())+1;
+   rand_race = (rand() % races.size());
+   rand_path = (rand() % paths.size());
   }
   else 
   {

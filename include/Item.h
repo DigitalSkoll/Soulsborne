@@ -73,7 +73,7 @@ void Item::print()
 
 void Item::gen_item()
 {
-  int id = (rand() % items.size()) + 1;
+  int id = (rand() % items.size());
 
   this->name = items[id].name;
   this->hp_gain = items[id].hp;
