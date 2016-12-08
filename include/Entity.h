@@ -203,19 +203,19 @@ void Entity::take_damage_hp(int d)
 // print out basic info about the entity
 void Entity::print()
 {
-  std::cout << "Name:     " << this->name << std::endl;
-  std::cout << "Speed:          " << this->speed << std::endl;
-  std::cout << "HP:     " << this->hp << std::endl;
-  std::cout << "MP:     " << this->mp << std::endl;
-  std::cout << "Wallet:   " << this->wallet << std::endl;
-  std::cout << "Armor:    " << this->armor << std::endl;
-  std::cout << "Shield:   " << this->shield << std::endl;
-  std::cout << "Shield Armor:   " << this->shield_armor << std::endl;
+  std::cout << "Name:         " << this->name << std::endl;
+  std::cout << "Speed:        " << this->speed << std::endl;
+  std::cout << "HP:           " << this->hp << std::endl;
+  std::cout << "MP:           " << this->mp << std::endl;
+  std::cout << "Wallet:       " << this->wallet << std::endl;
+  std::cout << "Armor:        " << this->armor << std::endl;
+  std::cout << "Shield:       " << this->shield << std::endl;
+  std::cout << "Shield Armor: " << this->shield_armor << std::endl;
   std::cout << "Base Attack:  " << this->base_attack << std::endl;
   if (is_dead())
-    std::cout << "Status:   Dead\n";
+    std::cout << "Status:        Dead\n";
   else
-    std::cout << "Status:   Alive\n";
+    std::cout << "Status:        Alive\n";
 }
 
 // use_item(int index)

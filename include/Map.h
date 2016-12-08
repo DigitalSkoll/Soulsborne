@@ -128,6 +128,7 @@ void Map::move(const bearing d)
       this->current = this->current->doors[d];
 
       std::cout << "You went " << direction_ctos(d) << std::endl;
+      //this->current->display_mobs();
     }
   }
   else
@@ -135,6 +136,11 @@ void Map::move(const bearing d)
     // I don't like using goto in this, but it's the easiest thing in this case
     // and it's not that bad here tbh
     goto MV;
+  }
+
+  if (this->current->mob_alive_count() > 0)
+  {
+    this->current->start_combat();
   }
 }
 

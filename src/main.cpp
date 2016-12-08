@@ -1,3 +1,4 @@
+#include <cstring>
 #include <ctime>
 #include <iostream>
 #include <string>
@@ -17,40 +18,42 @@ int main()
 
   Player * p = new Player();
   Map m(p);
-  char response;
-  while (response != 'Q')
+  std::string response;
+  while (true)
   {
-    std::cin >> response;
+    getline(std::cin, response);
 
-    switch (response)
+    if ("north" == response ||
+        "south" == response ||
+        "east" == response ||
+        "west" == response)
     {
-      case 'N':
-      case 'S':
-      case 'E':
-      case 'W':
-        // intentional drop through
-        m.move(ctob(response));
-        break;
-      case 'B':
-        m.back();
-        break;
-      case 'P':
-        m.print_history();
-        break;
-      case 'T':
-        m.reset();
-        break;
-      case 'R':
-        m.respawn();
-        break;
-      case 'L':
-        m.scan_doors();
-        break;
-      case 'Q':
-        std::cout << "Good Bye\n";
-        break;
-      default:
-        std::cout << "I don't know how to do that.\n";
+      m.move(ctob(toupper(response.at(0))));
+    }
+    else if ("back" == response)
+    {
+      m.back();
+    }
+    else if ("history" == response)
+    {
+      m.print_history();
+    }
+    else if ("scan" == response)
+    {
+      m.scan_doors();
+    }
+    else if ("mobs" == response)
+    {
+      m.get_current()->display_mobs();
+    }
+    else if ("quit" == response)
+    {
+      std::cout << "Good Bye\n";
+      break;
+    }
+    else
+    {
+      std::cout << "I don't know how to \"" << response << "\"" << std::endl;
     }
   }
   delete p;

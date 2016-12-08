@@ -23,10 +23,10 @@ class Room
 //  Player *p;
     bool locked;
     bool require_key;
-    int loot_size;
-    int mob_size;
-    Item loot[MAX_ITEMS];
-    Mob mobs[MAX_MOBS];
+    unsigned int loot_size;
+    unsigned int mob_size;
+    vector<Item> loot;
+    vector<Mob> mobs;
     Room * doors[NUM_DOORS];
     Room * previous;
     Room * next;
@@ -37,10 +37,13 @@ class Room
 //    Room(Player soul);
     Room(room_type t);
     room_type get_type();
+    unsigned int mob_alive_count();
+
 
     void spawn_boss();
     void spawn_mobs();
 //  void spawn_loot();
+    void start_combat();
 
     void display_mobs();
 
@@ -82,6 +85,21 @@ room_type Room::get_type()
   return this->type;
 }
 
+unsigned int Room::mob_alive_count()
+{
+  unsigned int count = 0;
+
+  for (unsigned int i = 0; i < this->mob_size; i++)
+  {
+    if (!this->mobs.at(i).is_dead())
+    {
+      count++;
+    }
+  }
+
+  return count;
+}
+
 void Room::spawn_boss()
 {
   this->spawn_mobs();
@@ -91,19 +109,24 @@ void Room::spawn_mobs()
 {
   Mob tmp;
   this->mob_size = (rand() % MAX_MOBS ) + 1;
-  for (int i = 0; i < this->mob_size; i++)
+  for (unsigned int i = 0; i < this->mob_size; i++)
   {
     tmp.morph_mob();
-    mobs[i] = tmp;
+    mobs.push_back(tmp);
   }
+}
+
+void Room::start_combat()
+{
+  
 }
 
 void Room::display_mobs()
 {
-  for (int i = 0; i < this->mob_size; i++)
+  for (unsigned int i = 0; i < this->mob_size; i++)
   {
     cout << i << ") ",
-    mobs[i].print();
+    mobs.at(i).print();
     cout << endl;
   }
 }
