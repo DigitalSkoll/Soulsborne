@@ -143,6 +143,7 @@ void Map::move(const bearing d)
     bool player_death = this->current->start_combat(this->player);
     if (player_death)
     {
+      std::cout << "You died\n";
       this->respawn();
     }
   }
@@ -207,6 +208,7 @@ void Map::respawn()
   this->current = this->head;
 
   player->refresh();
+  std::cout << "You respawned\n";
 }
 
 void Map::scan_doors()
