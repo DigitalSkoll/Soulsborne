@@ -9,6 +9,7 @@
 #include <fstream>
 #include <stdlib.h>
 #include "Entity.h"
+#include "Mob.h"
 #include "Role.h"
 
 using namespace std;
@@ -41,6 +42,9 @@ class Player : public Entity
 
     bool apply_race(int race_id);
     bool apply_path(int path_id);
+    void loot_items(Mob &m);
+    void loot_gear(Mob &m);
+    void inven_mgmt();
 
     void refresh();
 
@@ -119,4 +123,80 @@ void Player::refresh()
   this->hp     = this->max_hp;
   this->mp     = this->max_mp;
   this->shield = this->max_shield;
+}
+
+void Player::loot_items(Mob &m)
+{
+  if (!m.is_dead())
+  {
+    for(int i = 0; i < m.num_inven(); i++)
+   {
+     this->add_item(m.get_item(i));
+     cout << "Got: " << m.get_item_name(i) << endl;; 
+     m.remove_item(i);
+   }
+  }
+  else
+    cout << "It is Still Alive!\n";
+}
+
+void Player::loot_gear(Mob &m)
+{
+  if (!m.is_dead())
+  {
+    for(int i = 0; i < m.num_inven(); i++)
+   {
+     this->add_gear(m.get_gear(i));
+     cout << "Got: " << m.get_gear_name(i) << endl;
+   }
+  }
+  else
+    cout << "It is Still Alive!\n";
+}
+
+void Player::inven_mgmt()
+{
+  string resp;
+  int i;
+  while (true)
+  {
+    cout << "inventory ~> ";
+    getline(cin, resp);
+
+    if ("print" == resp)
+      this->print_all_inven();
+    else if ("use" == resp)
+    {
+      cout << "inventory ~> item id ] ";
+      cin >> i;
+      this->use_item(i);
+    }
+    else if ("detail" == resp)
+    {
+      cout << "inventory ~> item id ] ";
+      cin >> i;
+      this->print_inven(i);
+    }
+    else if ("drop" == resp)
+    {
+      cout << "inventory ~> item id ] ";
+      cin >> i;
+      this->remove_item(i);
+    }
+    else if ("num" == resp)
+    {
+      cout << this->num_inven() << " in Inventory\n";
+    }
+    else if ("help" == resp)
+    {
+      cout << "print  - print list of items in inventory\n"
+           << "use    - use an item\n"
+           << "detail - see detailed information about item\n"
+           << "drop   - drop an item\n"
+           << "num    - total number of items in inventory\n"
+           << "help   - print this message\n";
+    }
+    else
+      cout << "Invalid Command\n";
+  }
 }

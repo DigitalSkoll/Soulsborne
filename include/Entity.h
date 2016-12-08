@@ -71,22 +71,29 @@ class Entity
     void take_damage_shield(int d);               // Entity Shield takes damage
     void take_damage_hp(int d);                   // Entity HP takes damage
     void print();                                 // Print info
-    void add_item(Item& i);                       // Add Item to inventory
+    void add_item(Item i);                       // Add Item to inventory
+    Item get_item(unsigned int index);
     bool remove_item(unsigned int index);                  // Remove Item at index
     bool use_item(unsigned int index);                    // Apply item bonus to entity
     void print_inven(int i);                      // print iventory item at index i
     void print_inven(vector<Item>::iterator& it); // print iventory item using iterator
     void print_all_inven();                       // print every item in inventory
     int num_inven();                              // print number of items in inventory
+    int num_gear();
 //  int inven_cost();                             // print total cost of items in inventory
     bool put_on(char pos, Equipment &eq);         // Put on eq at equip
     bool take_off(char pos);                      // Take off what is at equip
 
     void print_equip();
+    void print_gear(unsigned int index);
     void print_gear(vector<Equipment>::iterator& eq);
     void print_all_gear();
     void add_gear(Equipment eq);
+    Equipment get_gear(unsigned int index);
     bool remove_gear(unsigned int index);
+
+    string get_item_name(unsigned int index);
+    string get_gear_name(unsigned int index);
 
 };
 
@@ -239,14 +246,23 @@ bool Entity::use_item(unsigned int index)
   this->remove_item(index);
   return true;
 }
-// add_item(Item& i)
+// add_item(Item i)
 // test if the entity has enough money to buy the item
 // if entity has enough subtract cost of item from wallet
 // push item to the end of the vector and use the use_item(Item& i)
 // function to apply armor and attack bonus from item to entity
-void Entity::add_item(Item& i)
+void Entity::add_item(Item i)
 {
   this->list.push_back(i);
+}
+
+Item Entity::get_item(unsigned int index)
+{
+  if (index > list.size() || index <=0)
+  {
+    cout << "Invalid Index\n";
+  }
+  return list[index];
 }
 
 bool Entity::remove_item(unsigned int index)
@@ -266,7 +282,7 @@ bool Entity::remove_item(unsigned int index)
 // to print out the item information
 void Entity::print_inven(int i)
 {
-  this->list[i].print();
+  cout << i << ": " << list[i].get_name();
 }
 
 // print_inven(vector<Item>::iterator& it)
@@ -286,6 +302,10 @@ void Entity::print_all_inven()
   for (it =this->list.begin(); it < this->list.end(); it++)
     this->print_inven(it);
   
+}
+void Entity::print_gear(unsigned int index)
+{
+  this->gear[index].print();
 }
 // print gear
 void Entity::print_gear(vector<Equipment>::iterator& eq)
@@ -395,6 +415,11 @@ int Entity::num_inven()
   return list.size();
 }
 
+int Entity::num_gear()
+{
+  return gear.size();
+}
+
 void Entity::print_equip()
 {
   cout << this->right_hand.get_name() << endl;
@@ -407,6 +432,14 @@ void Entity::add_gear(Equipment eq)
   this->gear.push_back(eq);
 }
 
+Equipment Entity::get_gear(unsigned int index)
+{
+  if (index > list.size() || index <=0)
+  {
+    cout << "Invalid Index\n";
+  }
+  return gear[index];
+}
 
 bool Entity::remove_gear(unsigned int index)
 {
@@ -419,3 +452,12 @@ bool Entity::remove_gear(unsigned int index)
   return true;
 }
 
+string Entity::get_item_name(unsigned int index)
+{
+  return list[index].get_name();
+}
+
+string Entity::get_gear_name(unsigned int index)
+{
+  return gear[index].get_name();
+}
