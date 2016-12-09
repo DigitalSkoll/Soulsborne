@@ -91,6 +91,7 @@ class Entity
     void add_gear(Equipment eq);
     Equipment get_gear(unsigned int index);
     bool remove_gear(unsigned int index);
+    void remove_all_inven();
 
     string get_item_name(unsigned int index);
     string get_gear_name(unsigned int index);
@@ -453,6 +454,12 @@ bool Entity::remove_gear(unsigned int index)
   }
   this->gear.erase(gear.begin() + (index - 1));
   return true;
+}
+
+void Entity::remove_all_inven()
+{
+  this->list.clear();
+  this->gear.clear();
 }
 
 string Entity::get_item_name(unsigned int index)

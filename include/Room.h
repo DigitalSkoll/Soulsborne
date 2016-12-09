@@ -155,9 +155,9 @@ bool Room::start_combat(Player * p)
           if (response == "use")
           {
             std::cout << "combat/inventory ~> ";
-            getline(std::cin, response);
             while (true)
             {
+              getline(std::cin, response);
               if (response == "print")
               {
                 p->print_all_inven();
@@ -318,6 +318,7 @@ void Room::loot_room(Player * p)
     {
       p->loot_items(this->mobs.at(i));
       p->loot_gear(this->mobs.at(i));
+      this->mobs.at(i).remove_all_inven();
     }
   }
 }
@@ -328,7 +329,7 @@ void Room::display_mobs()
   {
     for (unsigned int i = 0; i < this->mob_size; i++)
     {
-      cout << i << ") ",
+      cout << i << ") ";
       mobs.at(i).print();
       cout << endl;
     }

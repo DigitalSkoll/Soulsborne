@@ -73,10 +73,10 @@ void Equipment::operator=(const Equipment &other)
 void Equipment::print()
 {
   cout << this->name << endl;
-  cout << this->attack_bonus << endl;
-  cout << this->shield_bonus << endl;
-  cout << this->shield_armor_bonus << endl;
-  cout << this->dur << endl;
+  cout << "attack bonus: " << this->attack_bonus << endl;
+  cout << "shield bonus: " << this->shield_bonus << endl;
+  cout << "shield armor bonus:" << this->shield_armor_bonus << endl;
+  cout << "durability: " << this->dur << endl;
 }
 
 void Equipment::print_name()
