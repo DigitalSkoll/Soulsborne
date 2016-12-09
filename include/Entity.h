@@ -134,6 +134,7 @@ std::string Entity::get_name() { return this->name; }
 int Entity::get_speed() { return this->speed; }
 int Entity::get_hp() { return this->hp; }
 int Entity::get_mp() { return this->mp; }
+int Entity::get_armor() { return this->armor; }
 int Entity::get_shield() { return this->shield; }
 int Entity::get_shield_armor() { return this->shield_armor; }
 int Entity::get_base_attack() { return this->base_attack; }

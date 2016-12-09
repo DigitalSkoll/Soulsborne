@@ -1,3 +1,5 @@
+// would like non boost option
+//#include <boost/algorithm/string/trim_all.hpp>
 #include <cstring>
 #include <ctime>
 #include <iostream>
@@ -33,6 +35,7 @@ int main()
     std::cout << " ~> ";
 
     getline(std::cin, response);
+    //boost::trim_all(response);
 
     if ("north" == response ||
         "south" == response ||
@@ -73,6 +76,20 @@ int main()
     {
       m.get_current()->loot_room(p);
     }
+    else if ("drink" == response)
+    {
+      switch (m.get_current()->dec_fountain())
+      {
+        case SUCC:
+          p->refresh();
+          break;
+        case FAIL_NF:
+          p->take_damage_hp(p->get_armor() + 1);
+          break;
+        default:
+          break;
+      }
+    }
     else if ("help" == response)
     {
       std::cout << "[north | south | east | west] - go [north | south | east | west]\n"
@@ -83,8 +100,13 @@ int main()
                 << "stats - show your stats\n"
                 << "inve - start inventory mgmt\n"
                 << "gear - start gear mgmt\n"
-                << "loot - loot available containers\n"
-                << "quit - quit the game\n"
+                << "loot - loot available containers\n";
+      if (m.get_current()->get_fountain() > 0)
+      {
+        std::cout
+                << "drink - drink from the fountain to refresh your stats\n";
+      }
+      std::cout << "quit - quit the game\n"
                 << "help - print this message\n";
     }
     else if ("quit" == response)

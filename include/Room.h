@@ -19,6 +19,13 @@ enum room_type
   BOSS
 };
 
+enum fountain_status
+{
+  SUCC = 0,
+  FAIL_EF, // empty fountain
+  FAIL_NF  // no fountain
+};
+
 class Room
 {
   friend class Map;
@@ -26,6 +33,7 @@ class Room
 //  Player *p;
     bool locked;
     bool require_key;
+    int fountain;
     unsigned int loot_size;
     unsigned int mob_size;
     vector<Item> loot;
@@ -38,7 +46,9 @@ class Room
   public:
 //    Room(Player soul);
     Room(room_type t);
+    fountain_status dec_fountain();
     bool start_combat(Player * p);
+    int get_fountain() const;
     room_type get_type();
     unsigned int mob_alive_count();
 
@@ -72,15 +82,39 @@ Room::Room(room_type t)
   {
     case NORMAL:
       spawn_mobs();
+      this->fountain = -1;
       break;
     case SPAWN:
+      this->fountain = 5;
       break;
     case BOSS:
       spawn_boss();
+      this->fountain = -1;
       break;
     default:
       std::cout << "Something went terribly wrong in Room::Room(room_type t)\n";
   }
+}
+
+fountain_status Room::dec_fountain()
+{
+  if (this->fountain > 0)
+  {
+    fountain--;
+    std::cout << "You feel refreshed\n";
+    return SUCC;
+  }
+  else if (this->fountain == 0)
+  {
+    std::cout << "This fountain has run dry\n";
+    return FAIL_EF;
+  }
+  else
+  {
+    std::cout << "You swallowed some air\n";
+    return FAIL_NF;
+  }
+
 }
 
 bool Room::start_combat(Player * p)
@@ -252,6 +286,11 @@ bool Room::start_combat(Player * p)
   }
 
   return p->is_dead();
+}
+
+int Room::get_fountain() const
+{
+  return this->fountain;
 }
 
 room_type Room::get_type()
