@@ -5,7 +5,7 @@ DEPS=src/main.cpp
 OUT=bin/soulsborne
 
 soulsborne: $(DEPS)
-	$(CC) $(CFLAGS) $(INCLUDE) $(DEPS) -o $(OUT) 2> error.log
+	$(CC) $(CFLAGS) $(INCLUDE) $(DEPS) -o $(OUT)
 
 run: $(OUT)
 	$(OUT)
