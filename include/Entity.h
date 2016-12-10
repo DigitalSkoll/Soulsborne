@@ -227,9 +227,9 @@ void Entity::print()
   std::cout << "Shield Armor: " << this->shield_armor << std::endl;
   std::cout << "Base Attack:  " << this->base_attack << std::endl;
   if (is_dead())
-    std::cout << "Status:        Dead\n";
+    std::cout << "Status:       Dead\n";
   else
-    std::cout << "Status:        Alive\n";
+    std::cout << "Status:       Alive\n";
 }
 
 // use_item(int index)
@@ -238,19 +238,28 @@ bool Entity::use_item(unsigned int index)
 {
   if (index > this->list.size())
   {
-    cout << "Invlaid index\n";
+    std::cout << "Invlaid index\n";
     return false;
   }
-  this->hp += list[index-1].second.get_hp_gain();
-  this->mp += list[index-1].second.get_mp_gain();
+
+  this->hp     += list[index-1].second.get_hp_gain();
+  this->mp     += list[index-1].second.get_mp_gain();
   this->shield += list[index-1].second.get_shield_gain();
 
   if(this->hp > this->max_hp)
+  {
     this->hp = this->max_hp;
+  }
+
   if (this->mp > this->max_mp)
+  {
     this->mp = this->max_mp;
+  }
+
   if (this->shield > this->max_shield)
+  {
     this->shield = this->max_shield;
+  }
 
   if (list[index - 1].first > 1)
   {
@@ -258,7 +267,7 @@ bool Entity::use_item(unsigned int index)
   }
   else
   {
-    this->remove_item(index);
+    this->remove_item(index - 1);
   }
 
   return true;
@@ -454,7 +463,7 @@ bool Entity::take_off(char pos)
   Equipment *equip = NULL;
   switch (pos)
   {
-    case 'l': 
+    case 'l':
       equip = &this->left_hand;
       break;
     case 'r':
@@ -467,6 +476,7 @@ bool Entity::take_off(char pos)
       cout << "Don't have that!\n";
       return false;
   }
+
   if (equip->get_name() == "[ ]")
   {
     cout << "Nothing is there!\n";
@@ -482,6 +492,7 @@ bool Entity::take_off(char pos)
 
     bool added = false;
     inventory<unsigned int, Equipment>::iterator it;
+
     for (it = gear.begin(); it != gear.end(); it++)
     {
       if ((* it).second == * equip)
@@ -492,7 +503,7 @@ bool Entity::take_off(char pos)
     }
     if (! added)
     {
-      this->add_gear( *equip);
+      this->add_gear(* equip);
     }
 
     Equipment tmp("[ ]");
