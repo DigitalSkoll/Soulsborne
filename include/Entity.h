@@ -367,6 +367,16 @@ bool Entity::put_on(char pos, Equipment &eq)
     this->armor        += equip->get_armor_bonus();
     this->shield_armor += equip->get_shield_armor_bonus();
 
+    std::vector<Equipment>::iterator it;
+
+    for (it = gear.begin(); it != gear.end(); it++)
+    {
+      if (& (* it) == & eq)
+      {
+        gear.erase(it);
+      }
+    }
+
     return true;
   }
 }
