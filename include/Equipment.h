@@ -32,8 +32,11 @@ class Equipment
 
     void print();
     void print_name();
-    void operator=(const Equipment &other);
     void gen_gear();
+
+    void operator=(const Equipment &other);
+    bool operator==(const Equipment & other);
+    bool operator!=(const Equipment & other);
 };
 
 Equipment::Equipment(string n, int att, int arm, int shi, int sab, int dur)
@@ -60,16 +63,6 @@ int Equipment::get_shield_bonus() { return this->shield_bonus; }
 int Equipment::get_shield_armor_bonus() { return this->shield_armor_bonus; }
 int Equipment::get_dur() { return this->dur; }
 
-
-void Equipment::operator=(const Equipment &other)
-{
-  this->name = other.name;
-  this->attack_bonus = other.attack_bonus;
-  this->shield_bonus = other.shield_bonus;
-  this->shield_armor_bonus = other.shield_armor_bonus;
-  this->dur = other.dur;
-}
-
 void Equipment::print()
 {
   cout << this->name << endl;
@@ -93,4 +86,27 @@ void Equipment::gen_gear()
   this->shield_bonus = equips[id].shield;
   this->shield_armor_bonus = equips[id].shield_armor;
   this->dur = equips[id].dur;
+}
+
+void Equipment::operator=(const Equipment &other)
+{
+  this->name = other.name;
+  this->attack_bonus = other.attack_bonus;
+  this->shield_bonus = other.shield_bonus;
+  this->shield_armor_bonus = other.shield_armor_bonus;
+  this->dur = other.dur;
+}
+
+bool Equipment::operator==(const Equipment & other)
+{
+  return this->name               == other.name &&
+         this->attack_bonus       == other.attack_bonus &&
+         this->shield_bonus       == other.shield_bonus &&
+         this->shield_armor_bonus == other.shield_armor_bonus &&
+         this->dur                == other.dur;
+}
+
+bool Equipment::operator!=(const Equipment & other)
+{
+  return !(* this == other);
 }

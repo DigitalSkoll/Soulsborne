@@ -132,10 +132,10 @@ void Player::loot_items(Mob &m)
 {
   if (m.is_dead())
   {
-    for(int i = 0; i < m.num_inven(); i++)
+    for(int i = 0; i < m.len_inven(); i++)
    {
      this->add_item(m.get_item(i));
-     cout << "Got: " << m.get_item_name(i) << endl;; 
+     std::cout << "Got: " << m.get_item_name(i) << std::endl;
      m.remove_item(i);
    }
   }
@@ -147,10 +147,10 @@ void Player::loot_gear(Mob &m)
 {
   if (m.is_dead())
   {
-    for(int i = 0; i < m.num_gear(); i++)
+    for(int i = 0; i < m.len_gear(); i++)
    {
      this->add_gear(m.get_gear(i));
-     cout << "Got: " << m.get_gear_name(i) << endl;
+     std::cout << "Got: " << m.get_gear_name(i) << std::endl;
    }
   }
   else

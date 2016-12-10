@@ -108,7 +108,7 @@ bool Mob::apply_path(int path_id)
 
 void Mob::print_title()
 {
-  cout << this->mob_race << " " << this->mob_path << endl;
+  std::cout << this->mob_race << " " << this->mob_path << endl;
 }
 
 void Mob::morph_mob()
@@ -127,6 +127,7 @@ void Mob::morph_mob()
     rand_race = 1;
     rand_path = 1;
   }
+  
   int rand_item = (rand() % 3) + 1;
   int rand_gear = (rand() % 3) + 1;
   for (int j = 0; j < rand_item; j++)

@@ -6,6 +6,7 @@
 //==========================================
 
 #pragma once
+#include <iterator>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -14,6 +15,8 @@
 #include "Item.h"
 #include "Equipment.h"
 
+template <class A, class B>
+using inventory = std::vector<std::pair<A, B>>;
 
 class Entity
 {
@@ -31,8 +34,8 @@ class Entity
     int base_attack;                // basic damage delt
     int wallet;                     // Money
     bool dead;                      // alive or dead
-    vector<Item> list;              // Inventory
-    vector<Equipment> gear;         // Not used Gear
+    inventory<unsigned int, Item> list;              // Inventory
+    inventory<unsigned int, Equipment> gear;         // Not used Gear
     Equipment left_hand;            // Equipment in Left Hand
     Equipment right_hand;           // Equipment in Right Hand
     Equipment body;                 // Equipment in Body
@@ -76,17 +79,19 @@ class Entity
     bool remove_item(unsigned int index);                  // Remove Item at index
     bool use_item(unsigned int index);                    // Apply item bonus to entity
     void print_inven(unsigned int i);                      // print iventory item at index i
-    void print_inven(vector<Item>::iterator& it); // print iventory item using iterator
+    void print_inven(inventory<unsigned int, Item>::iterator& it); // print iventory item using iterator
     void print_all_inven();                       // print every item in inventory
     int num_inven();                              // print number of items in inventory
     int num_gear();
+    int len_inven();
+    int len_gear();
 //  int inven_cost();                             // print total cost of items in inventory
-    bool put_on(char pos, Equipment &eq);         // Put on eq at equip
+    bool put_on(char pos, std::pair<unsigned int, Equipment> &eq);         // Put on eq at equip
     bool take_off(char pos);                      // Take off what is at equip
 
     void print_equip();
     void print_gear(unsigned int index);
-    void print_gear(vector<Equipment>::iterator& eq);
+    void print_gear(inventory<unsigned int, Equipment>::iterator& eq);
     void print_all_gear();
     void add_gear(Equipment eq);
     Equipment get_gear(unsigned int index);
@@ -228,24 +233,34 @@ void Entity::print()
 }
 
 // use_item(int index)
-// apply the bonus of the item at index in list 
+// apply the bonus of the item at index in list
 bool Entity::use_item(unsigned int index)
 {
-  if (index-1 > this->list.size() || index - 1 <= 0)
+  if (index > this->list.size())
   {
     cout << "Invlaid index\n";
     return false;
   }
-  this->hp += list[index-1].get_hp_gain();
-  this->mp += list[index-1].get_mp_gain();
-  this->shield += list[index-1].get_shield_gain();
+  this->hp += list[index-1].second.get_hp_gain();
+  this->mp += list[index-1].second.get_mp_gain();
+  this->shield += list[index-1].second.get_shield_gain();
+
   if(this->hp > this->max_hp)
     this->hp = this->max_hp;
   if (this->mp > this->max_mp)
     this->mp = this->max_mp;
   if (this->shield > this->max_shield)
     this->shield = this->max_shield;
-  this->remove_item(index);
+
+  if (list[index - 1].first > 1)
+  {
+    list[index - 1].first--;
+  }
+  else
+  {
+    this->remove_item(index);
+  }
+
   return true;
 }
 // add_item(Item i)
@@ -255,16 +270,30 @@ bool Entity::use_item(unsigned int index)
 // function to apply armor and attack bonus from item to entity
 void Entity::add_item(Item i)
 {
-  this->list.push_back(i);
+  inventory<unsigned int, Item>::iterator it;
+  bool added = false;
+  for (it = list.begin(); it != list.end(); it++)
+  {
+    if ((* it).second == i)
+    {
+      (* it).first++;
+      added = true;
+    }
+  }
+  if (! added)
+  {
+    this->list.push_back(std::make_pair(1, i));
+  }
 }
 
 Item Entity::get_item(unsigned int index)
 {
   if (index > list.size())
   {
-    cout << "Invalid Index\n";
+    std::cout << "Invalid Index\n";
   }
-  return list[index];
+
+  return list.at(index).second;
 }
 
 bool Entity::remove_item(unsigned int index)
@@ -274,7 +303,16 @@ bool Entity::remove_item(unsigned int index)
     cout << "Invalid Index\n";
     return false;
   }
-  this->list.erase(list.begin() + (index - 1));
+
+  if (list.at(index).first > 1)
+  {
+    list.at(index).first--;
+  }
+  else
+  {
+    this->list.erase(list.begin() + (index - 1));
+  }
+
   return true;
 }
 
@@ -285,47 +323,67 @@ bool Entity::remove_item(unsigned int index)
 void Entity::print_inven(unsigned int i)
 {
   if (i > list.size())
-    cout << "Invaid Index\n";
+    std::cout << "Invaid Index\n";
   else
-    cout << i << ": " << list[i].get_name();
+    std::cout << i << ": " << list[i].second.get_name();
+
+  if (list[i].first > 1)
+  {
+    std::cout << " (" << list[i].first << ")";
+  }
+
+  std::cout << std::endl;
 }
 
-// print_inven(vector<Item>::iterator& it)
+// print_inven(inventory<unsigned int, Item>::iterator& it)
 // same thing as print_inven(int i) except using 
 // a vector iterator
-void Entity::print_inven(vector<Item>::iterator& it)
+void Entity::print_inven(inventory<unsigned int, Item>::iterator& it)
 {
-  cout << (it - list.begin()) + 1 << ": " << it->get_name() << endl;
+  std::cout << (it - list.begin()) + 1 << ": " << it->second.get_name();
+
+  if (it->first > 1)
+  {
+    std::cout << " (" << it->first << ")";
+  }
+
+  std::cout << std::endl;
 }
 
 // print_all_inven()
 // print all items in inventory using an iterator
-// and print_inven(vector<Item>::iterator& it)
+// and print_inven(inventory<unsigned int, Item>::iterator& it)
 void Entity::print_all_inven()
 {
-  vector<Item>::iterator it;
+  inventory<unsigned int, Item>::iterator it;
   for (it =this->list.begin(); it < this->list.end(); it++)
     this->print_inven(it);
-  
 }
+
 void Entity::print_gear(unsigned int index)
 {
-  this->gear[index-1].print();
+  this->gear[index-1].second.print();
 }
+
 // print gear
-void Entity::print_gear(vector<Equipment>::iterator& eq)
+void Entity::print_gear(inventory<unsigned int, Equipment>::iterator& eq)
 {
-  cout << (eq - gear.begin()) + 1 << ": ";
-  eq->print_name();
+  cout << (eq - gear.begin()) + 1 << ": " << eq->second.get_name();
+
+  if (eq->first > 1)
+  {
+    std::cout << " (" << eq->first << ")";
+  }
+
+  std::cout << std::endl;
 }
 
 // print_all_gear
 void Entity::print_all_gear()
 {
-  vector<Equipment>::iterator eq;
+  inventory<unsigned int, Equipment>::iterator eq;
   for (eq =this->gear.begin(); eq < this->gear.end(); eq++)
     this->print_gear(eq);
-  
 }
 
 // takes pointer to equipment and sets it to the address of eq
@@ -333,12 +391,12 @@ void Entity::print_all_gear()
 // using the function take_off(Equipment *equip)
 // if equip is NULL equip is set to address of eq and the 
 // bonuses are applied to the Entity
-bool Entity::put_on(char pos, Equipment &eq)
+bool Entity::put_on(char pos, std::pair<unsigned int, Equipment> &eq)
 {
   Equipment *equip = NULL;
   switch (pos)
   {
-    case 'l': 
+    case 'l':
       equip = &this->left_hand;
       break;
     case 'r':
@@ -359,7 +417,7 @@ bool Entity::put_on(char pos, Equipment &eq)
   }
   else
   {
-    *equip = eq;
+    *equip = eq.second;
 
     this->base_attack  += equip->get_attack_bonus();
     this->shield       += equip->get_shield_bonus();
@@ -367,13 +425,20 @@ bool Entity::put_on(char pos, Equipment &eq)
     this->armor        += equip->get_armor_bonus();
     this->shield_armor += equip->get_shield_armor_bonus();
 
-    std::vector<Equipment>::iterator it;
-
-    for (it = gear.begin(); it != gear.end(); it++)
+    if (eq.first > 1)
     {
-      if (& (* it) == & eq)
+      eq.first--;
+    }
+    else
+    {
+      inventory<unsigned int, Equipment>::iterator it;
+
+      for (it = gear.begin(); it != gear.end(); it++)
       {
-        gear.erase(it);
+        if (& (* it) == & eq)
+        {
+          gear.erase(it);
+        }
       }
     }
 
@@ -415,9 +480,22 @@ bool Entity::take_off(char pos)
     this->armor        -= equip->get_armor_bonus();
     this->shield_armor -= equip->get_shield_armor_bonus();
 
-    this->gear.push_back(*equip);
-    Equipment tmp("[ ]");
+    bool added = false;
+    inventory<unsigned int, Equipment>::iterator it;
+    for (it = gear.begin(); it != gear.end(); it++)
+    {
+      if ((* it).second == * equip)
+      {
+        (* it).first++;
+        added = true;
+      }
+    }
+    if (! added)
+    {
+      this->add_gear( *equip);
+    }
 
+    Equipment tmp("[ ]");
     *equip = tmp;
 
     return true;
@@ -427,10 +505,36 @@ bool Entity::take_off(char pos)
 
 int Entity::num_inven()
 {
-  return list.size();
+  unsigned int count;
+  inventory<unsigned int, Item>::iterator it;
+
+  for (it = list.begin(); it != list.end(); it++)
+  {
+    count += (* it).first;
+  }
+
+  return count;
 }
 
 int Entity::num_gear()
+{
+  unsigned int count;
+  inventory<unsigned int, Item>::iterator it;
+
+  for (it = list.begin(); it != list.end(); it++)
+  {
+    count += (* it).first;
+  }
+
+  return count;
+}
+
+int Entity::len_inven()
+{
+  return list.size();
+}
+
+int Entity::len_gear()
 {
   return gear.size();
 }
@@ -444,7 +548,21 @@ void Entity::print_equip()
 
 void Entity::add_gear(Equipment eq)
 {
-  this->gear.push_back(eq);
+  inventory<unsigned int, Equipment>::iterator it;
+  bool added = false;
+
+  for (it = gear.begin(); it != gear.end(); it++)
+  {
+    if ((* it).second == eq)
+    {
+      (* it).first++;
+      added = true;
+    }
+  }
+  if (! added)
+  {
+    this->gear.push_back(std::make_pair(1, eq));
+  }
 }
 
 Equipment Entity::get_gear(unsigned int index)
@@ -453,7 +571,7 @@ Equipment Entity::get_gear(unsigned int index)
   {
     cout << "Invalid Index\n";
   }
-  return gear[index];
+  return gear[index].second;
 }
 
 bool Entity::remove_gear(unsigned int index)
@@ -463,7 +581,15 @@ bool Entity::remove_gear(unsigned int index)
     cout << "Invalid Index\n";
     return false;
   }
-  this->gear.erase(gear.begin() + (index - 1));
+
+  if (gear.at(index - 1).first > 1)
+  {
+    gear.at(index- 1).first--;
+  }
+  else
+  {
+    this->gear.erase(gear.begin() + (index - 1));
+  }
   return true;
 }
 
@@ -475,10 +601,10 @@ void Entity::remove_all_inven()
 
 string Entity::get_item_name(unsigned int index)
 {
-  return list[index].get_name();
+  return list[index].second.get_name();
 }
 
 string Entity::get_gear_name(unsigned int index)
 {
-  return gear[index].get_name();
+  return gear[index].second.get_name();
 }

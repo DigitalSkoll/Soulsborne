@@ -36,6 +36,9 @@ class Item
 
     void print();   // Print out basic info of Item
     void gen_item();
+
+    bool operator==(const Item & other);
+    bool operator!=(const Item & other);
 };
 
 // Constructors
@@ -79,4 +82,17 @@ void Item::gen_item()
   this->hp_gain = items[id].hp;
   this->mp_gain = items[id].mp;
   this->shield_gain = items[id].shield;
+}
+
+bool Item::operator==(const Item & other)
+{
+  return this->name        == other.name &&
+         this->hp_gain     == other.hp_gain &&
+         this->mp_gain     == other.mp_gain &&
+         this->shield_gain == other.shield_gain;
+}
+
+bool Item::operator!=(const Item & other)
+{
+  return !(* this == other);
 }
