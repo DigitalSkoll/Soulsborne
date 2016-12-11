@@ -76,6 +76,7 @@ class Entity
     void print();                                 // Print info
     void add_item(Item i);                       // Add Item to inventory
     Item get_item(unsigned int index);
+    unsigned int get_item_count(unsigned int index);
     bool remove_item(unsigned int index);                  // Remove Item at index
     bool use_item(unsigned int index);                    // Apply item bonus to entity
     void print_inven(unsigned int i);                      // print iventory item at index i
@@ -95,6 +96,7 @@ class Entity
     void print_all_gear();
     void add_gear(Equipment eq);
     Equipment get_gear(unsigned int index);
+    unsigned int get_gear_count(unsigned int index);
     bool remove_gear(unsigned int index);
     void remove_all_inven();
 
@@ -242,9 +244,9 @@ bool Entity::use_item(unsigned int index)
     return false;
   }
 
-  this->hp     += list[index-1].second.get_hp_gain();
-  this->mp     += list[index-1].second.get_mp_gain();
-  this->shield += list[index-1].second.get_shield_gain();
+  this->hp     += list[index].second.get_hp_gain();
+  this->mp     += list[index].second.get_mp_gain();
+  this->shield += list[index].second.get_shield_gain();
 
   if(this->hp > this->max_hp)
   {
@@ -261,13 +263,13 @@ bool Entity::use_item(unsigned int index)
     this->shield = this->max_shield;
   }
 
-  if (list[index - 1].first > 1)
+  if (list[index].first > 1)
   {
-    list[index - 1].first--;
+    list[index].first--;
   }
   else
   {
-    this->remove_item(index - 1);
+    this->remove_item(index);
   }
 
   return true;
@@ -305,6 +307,16 @@ Item Entity::get_item(unsigned int index)
   return list.at(index).second;
 }
 
+unsigned int Entity::get_item_count(unsigned int index)
+{
+  if (index > list.size())
+  {
+    std::cout << "Invalid Index\n";
+  }
+
+  return list.at(index).first;
+}
+
 bool Entity::remove_item(unsigned int index)
 {
   if (index > list.size())
@@ -319,7 +331,7 @@ bool Entity::remove_item(unsigned int index)
   }
   else
   {
-    this->list.erase(list.begin() + (index - 1));
+    this->list.erase(list.begin() + index);
   }
 
   return true;
@@ -371,7 +383,7 @@ void Entity::print_all_inven()
 
 void Entity::print_gear(unsigned int index)
 {
-  this->gear[index-1].second.print();
+  this->gear[index].second.print();
 }
 
 // print gear
@@ -582,7 +594,18 @@ Equipment Entity::get_gear(unsigned int index)
   {
     cout << "Invalid Index\n";
   }
+
   return gear[index].second;
+}
+
+unsigned int Entity::get_gear_count(unsigned int index)
+{
+  if (index > list.size())
+  {
+    cout << "Invalid Index\n";
+  }
+
+  return gear[index].first;
 }
 
 bool Entity::remove_gear(unsigned int index)
@@ -593,13 +616,13 @@ bool Entity::remove_gear(unsigned int index)
     return false;
   }
 
-  if (gear.at(index - 1).first > 1)
+  if (gear.at(index).first > 1)
   {
-    gear.at(index- 1).first--;
+    gear.at(index).first--;
   }
   else
   {
-    this->gear.erase(gear.begin() + (index - 1));
+    this->gear.erase(gear.begin() + index);
   }
   return true;
 }

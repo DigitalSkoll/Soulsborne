@@ -133,14 +133,26 @@ void Player::loot_items(Mob &m)
   if (m.is_dead())
   {
     for(int i = 0; i < m.len_inven(); i++)
-   {
-     this->add_item(m.get_item(i));
-     std::cout << "Got: " << m.get_item_name(i) << std::endl;
-     m.remove_item(i);
-   }
+    {
+      std::cout << "Got: ";
+      std::cout << m.get_item_name(i);
+      if (m.get_item_count(i) > 1)
+      {
+        std::cout << " (" << m.get_item_count(i) << ")";
+      }
+      std::cout << std::endl;
+
+      for (unsigned int j = 0; j < m.get_item_count(i); j++)
+      {
+        this->add_item(m.get_item(i));
+//        m.remove_item(i);
+      }
+    }
   }
   else
+  {
     cout << "It is Still Alive!\n";
+  }
 }
 
 void Player::loot_gear(Mob &m)
@@ -148,13 +160,26 @@ void Player::loot_gear(Mob &m)
   if (m.is_dead())
   {
     for(int i = 0; i < m.len_gear(); i++)
-   {
-     this->add_gear(m.get_gear(i));
-     std::cout << "Got: " << m.get_gear_name(i) << std::endl;
-   }
+    {
+      std::cout << "Got: ";
+      std::cout << m.get_gear_name(i);
+      if (m.get_gear_count(i) > 1)
+      {
+        std::cout << " (" << m.get_gear_count(i) << ")";
+      }
+      std::cout << std::endl;
+
+      for (unsigned int j = 0; j < m.get_gear_count(i); j++)
+      {
+        this->add_gear(m.get_gear(i));
+//        m.remove_gear(i);
+      }
+    }
   }
   else
+  {
     cout << "It is Still Alive!\n";
+  }
 }
 
 void Player::inven_mgmt()
@@ -174,7 +199,7 @@ void Player::inven_mgmt()
       cin >> i;
       cin.clear();
       cin.ignore();
-      this->use_item(i);
+      this->use_item(i - 1);
     }
     else if ("detail" == resp)
     {
@@ -182,7 +207,7 @@ void Player::inven_mgmt()
       cin >> i;
       cin.clear();
       cin.ignore();
-      this->print_inven(i);
+      this->print_inven(i - 1);
     }
     else if ("drop" == resp)
     {
@@ -190,7 +215,7 @@ void Player::inven_mgmt()
       cin >> i;
       cin.clear();
       cin.ignore();
-      this->remove_item(i);
+      this->remove_item(i - 1);
     }
     else if ("num" == resp)
     {
@@ -235,7 +260,7 @@ void Player::gear_mgmt()
       cin >> loc;
       cin.clear();
       cin.ignore();
-      put_on(loc, gear[i-1]);
+      put_on(loc, gear[i - 1]);
     }
     else if ("take_off" == resp)
     {
@@ -255,7 +280,7 @@ void Player::gear_mgmt()
       cin >> i;
       cin.clear();
       cin.ignore();
-      this->print_gear(i); 
+      this->print_gear(i - 1); 
     }
     else if ("drop" == resp)
     {
@@ -263,7 +288,7 @@ void Player::gear_mgmt()
       cin >> i;
       cin.clear();
       cin.ignore();
-      this->remove_gear(i);
+      this->remove_gear(i - 1);
     }
     else if ("num" == resp)
     {
