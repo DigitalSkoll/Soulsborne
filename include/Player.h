@@ -241,7 +241,7 @@ void Player::inven_mgmt()
 void Player::gear_mgmt()
 {
   string resp;
-  int i;
+  unsigned int i;
   char loc;
   while (true)
   {
@@ -256,11 +256,18 @@ void Player::gear_mgmt()
       cin >> i;
       cin.clear();
       cin.ignore();
-      cout << "gear ~> gear id ] wear } ";
-      cin >> loc;
-      cin.clear();
-      cin.ignore();
-      put_on(loc, gear[i - 1]);
+      if (i - 1 >= gear.size())
+      {
+        std::cout << "Invalid Index\n";
+      }
+      else
+      {
+        cout << "gear ~> gear id ] wear } ";
+        cin >> loc;
+        cin.clear();
+        cin.ignore();
+        put_on(loc, gear[i - 1]);
+      }
     }
     else if ("take_off" == resp)
     {

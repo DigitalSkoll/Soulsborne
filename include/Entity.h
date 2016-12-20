@@ -238,15 +238,15 @@ void Entity::print()
 // apply the bonus of the item at index in list
 bool Entity::use_item(unsigned int index)
 {
-  if (index > this->list.size())
+  if (index >= this->list.size())
   {
     std::cout << "Invlaid index\n";
     return false;
   }
 
-  this->hp     += list[index].second.get_hp_gain();
-  this->mp     += list[index].second.get_mp_gain();
-  this->shield += list[index].second.get_shield_gain();
+  this->hp     += list.at(index).second.get_hp_gain();
+  this->mp     += list.at(index).second.get_mp_gain();
+  this->shield += list.at(index).second.get_shield_gain();
 
   if(this->hp > this->max_hp)
   {
@@ -263,9 +263,9 @@ bool Entity::use_item(unsigned int index)
     this->shield = this->max_shield;
   }
 
-  if (list[index].first > 1)
+  if (list.at(index).first > 1)
   {
-    list[index].first--;
+    list.at(index).first--;
   }
   else
   {
@@ -298,28 +298,28 @@ void Entity::add_item(Item i)
 }
 
 Item Entity::get_item(unsigned int index)
-{
-  if (index > list.size())
+{/*
+  if (index >= list.size())
   {
     std::cout << "Invalid Index\n";
   }
-
+*/
   return list.at(index).second;
 }
 
 unsigned int Entity::get_item_count(unsigned int index)
-{
-  if (index > list.size())
+{/*
+  if (index >= list.size())
   {
     std::cout << "Invalid Index\n";
   }
-
+*/
   return list.at(index).first;
 }
 
 bool Entity::remove_item(unsigned int index)
 {
-  if (index > list.size())
+  if (index >= list.size())
   {
     cout << "Invalid Index\n";
     return false;
@@ -343,12 +343,12 @@ bool Entity::remove_item(unsigned int index)
 // to print out the item information
 void Entity::print_inven(unsigned int i)
 {
-  if (i > list.size())
+  if (i >= list.size())
     std::cout << "Invaid Index\n";
   else
-    std::cout << i << ": " << list[i].second.get_name();
+    std::cout << i << ": " << list.at(i).second.get_name();
 
-  if (list[i].first > 1)
+  if (list.at(i).first > 1)
   {
     std::cout << " (" << list[i].first << ")";
   }
@@ -383,7 +383,14 @@ void Entity::print_all_inven()
 
 void Entity::print_gear(unsigned int index)
 {
-  this->gear[index].second.print();
+  if (index >= gear.size())
+  {
+    std::cout << "Invalid Index\n" << std::endl;
+  }
+  else
+  {
+    this->gear.at(index).second.print();
+  }
 }
 
 // print gear
@@ -459,6 +466,7 @@ bool Entity::put_on(char pos, std::pair<unsigned int, Equipment> &eq)
         if (& (* it) == & eq)
         {
           gear.erase(it);
+          break;
         }
       }
     }
@@ -589,23 +597,23 @@ void Entity::add_gear(Equipment eq)
 }
 
 Equipment Entity::get_gear(unsigned int index)
-{
+{/*
   if (index > list.size())
   {
     cout << "Invalid Index\n";
   }
-
-  return gear[index].second;
+*/
+  return gear.at(index).second;
 }
 
 unsigned int Entity::get_gear_count(unsigned int index)
-{
+{/*
   if (index > list.size())
   {
     cout << "Invalid Index\n";
   }
-
-  return gear[index].first;
+*/
+  return gear.at(index).first;
 }
 
 bool Entity::remove_gear(unsigned int index)
@@ -635,10 +643,10 @@ void Entity::remove_all_inven()
 
 string Entity::get_item_name(unsigned int index)
 {
-  return list[index].second.get_name();
+  return list.at(index).second.get_name();
 }
 
 string Entity::get_gear_name(unsigned int index)
 {
-  return gear[index].second.get_name();
+  return gear.at(index).second.get_name();
 }

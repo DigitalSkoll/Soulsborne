@@ -349,7 +349,7 @@ void Room::loot_room(Player * p)
     std::cin >> i;
     std::cin.clear();
     std::cin.ignore();
-    if (i > this->mob_size)
+    if (i >= this->mob_size)
     {
       std::cout << "That mob does not exist\n";
     }
